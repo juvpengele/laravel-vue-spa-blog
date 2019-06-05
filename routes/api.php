@@ -16,3 +16,13 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::resource("posts", "PostsController")->names([
+    "index" => "api.posts.index",
+    "show"  => "api.posts.show",
+    "store"  => "api.posts.store",
+    "create" => "api.posts.create",
+    "edit" => "api.posts.edit",
+    "update" => "api.posts.update",
+    "destroy" => "api.posts.destroy",
+]);
