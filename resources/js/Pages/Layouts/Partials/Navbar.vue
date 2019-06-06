@@ -14,8 +14,8 @@
                             Posts
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="#">All posts</a>
-                            <a class="dropdown-item" href="#">Popular posts</a>
+                            <router-link class="dropdown-item" :to="{ name: 'posts.index' }">All posts</router-link>
+                            <router-link class="dropdown-item" :to="{ name: 'posts.index', query: { popular: '1'} }">Popular posts</router-link>
                         </div>
                     </li>
                     <li class="nav-item dropdown">

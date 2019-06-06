@@ -22,6 +22,7 @@ class CreatePostsTable extends Migration
             $table->longText("content");
             $table->boolean("online")->default(1);
             $table->unsignedBigInteger("user_id");
+            $table->unsignedInteger("visits")->default(0);
             $table->timestamps();
 
             $table->foreign("category_id")->references("id")->on("categories")->onDelete("cascade");

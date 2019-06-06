@@ -5,14 +5,15 @@ use Illuminate\Database\Seeder;
 class PostsTableSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
-     *
-     * @return void
+     * @throws Exception
      */
     public function run()
     {
         $cover_path = asset("storage/covers/default.jpg");
 
-        factory(\App\Models\Post::class, 10)->create(["cover_path" => $cover_path]);
+        for ($i = 0; $i < 10; $i++) {
+            factory(\App\Models\Post::class)->create(["cover_path" => $cover_path, "visits" => random_int(0, 20)]);
+        }
+
     }
 }

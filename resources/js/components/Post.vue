@@ -5,7 +5,10 @@
             <h3 class="mb-0">{{ post.title }}</h3>
             <div class="mb-1 text-muted">{{ post.created_at }}</div>
             <p class="card-text">{{ post.description}}</p>
-            <a href="#" class="stretched-link">Continue reading</a>
+            <div class="d-flex justify-content-between">
+                <a href="#" class="stretched-link">Continue reading</a>
+                <span> {{ post.visits_count }} views </span>
+            </div>
         </div>
         <div class="col-auto d-none d-lg-block col-md-4">
             <img :src="post.cover_path" :alt="post.title" >

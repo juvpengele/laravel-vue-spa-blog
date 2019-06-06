@@ -17,7 +17,7 @@
     import Post from "../../components/Post";
     export default {
         name: "PostsIndex",
-        components: {Post},
+        components: { Post },
         data() {
             return {
                 posts: [],
@@ -25,16 +25,28 @@
             }
         },
         created() {
-            this.loadPosts();
+            this.loadPosts(this.getEndpoint(this.$route.query.popular));
         },
         methods: {
-            loadPosts() {
-                axios.get(this.endpoint)
+            loadPosts(endpoint) {
+                axios.get(endpoint)
                     .then(({data : posts}) => this.posts = posts.data)
                     .catch(error => console.log(error.response));
+
+            },
+            getEndpoint(popular = null)  {
+               return popular !== null ? `${this.endpoint}?popular=1` : this.endpoint;
+            }
+        },
+        watch: {
+            '$route.query'(newQuery, oldQuery) {
+                let endpoint = this.getEndpoint(newQuery.popular);
+                this.loadPosts(endpoint);
             }
         }
     }
+
+
 </script>
 
 <style scoped>

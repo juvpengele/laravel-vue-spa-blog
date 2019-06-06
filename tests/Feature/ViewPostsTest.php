@@ -21,4 +21,20 @@ class ViewPostsTest extends TestCase
         $this->assertCount(5, $response->json()["data"]);
 
     }
+
+    /** @test */
+    public function posts_can_be_filtered_with_popularity()
+    {
+        $this->withoutExceptionHandling();
+
+        $popularPost = create(Post::class, ["visits" => 30]);
+        create(Post::class, ["visits" => 0], 2);
+
+        $response = $this->getJson("/api/posts?popular=1")->json();
+
+        $this->assertEquals($popularPost->slug, $response["data"][0]["slug"]);
+    }
+
+
+
 }

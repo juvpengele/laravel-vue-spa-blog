@@ -15,11 +15,17 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = app(Post::class);
+
+        if(request("popular")) {
+            $posts = $posts->orderBy("visits", "DESC");
+        } else {
+            $posts = $posts->latest();
+        }
+
+        $posts  = $posts->get();
 
         return PostResource::collection($posts);
-
-//        return response()->json($posts, 200);
     }
 
 
