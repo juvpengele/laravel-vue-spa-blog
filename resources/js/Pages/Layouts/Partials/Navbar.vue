@@ -14,7 +14,7 @@
                             Posts
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <router-link class="dropdown-item" :to="{ name: 'posts.index' }">All posts</router-link>
+                            <router-link class="dropdown-item" :to="{ name: 'posts.index' }">Latest posts</router-link>
                             <router-link class="dropdown-item" :to="{ name: 'posts.index', query: { popular: '1'} }">Popular posts</router-link>
                         </div>
                     </li>
@@ -29,10 +29,7 @@
                         </div>
                     </li>
                 </ul>
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="text" placeholder="Search an article">
-                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                </form>
+                <PostSearch/>
             </div>
         </div>
     </nav>
@@ -40,8 +37,10 @@
 </template>
 
 <script>
+    import PostSearch from "../../../components/PostSearch";
     export default {
-        name: "Navbar"
+        name: "Navbar",
+        components: {PostSearch}
     }
 </script>
 

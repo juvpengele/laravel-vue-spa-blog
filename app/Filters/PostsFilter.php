@@ -31,7 +31,7 @@ class PostsFilter
 
     protected function search($value)
     {
-        return $this->builder->search($value);
+        return $this->builder->search($value)->take(5);
     }
 
     protected function popular()
