@@ -35,5 +35,16 @@ class PostTest extends TestCase
         $this->assertInstanceOf(Category::class, $this->post->category);
     }
 
+    /** @test */
+    public function we_can_search_posts()
+    {
+        create(Post::class);
+        $post = create(Post::class, ["title" => "Juvenal"]);
+
+        $searchedPosts = Post::search("Juvenal")->get();
+
+        $this->assertContains($post->title, $searchedPosts->pluck("title"));
+    }
+
 
 }

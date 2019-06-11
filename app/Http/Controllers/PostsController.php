@@ -2,30 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Filters\PostsFilter;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
 class PostsController extends Controller
 {
+    protected $filter;
+
+    public function __construct(PostsFilter $filter)
+    {
+        $this->filter = $filter;
+    }
+
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index()
     {
-        $posts = app(Post::class);
+        $filteredPosts  = $this->filter->apply(
+            request()->all(),
+            Post::latest()
+        );
 
-        if(request("popular")) {
-            $posts = $posts->orderBy("visits", "DESC");
-        } else {
-            $posts = $posts->latest();
-        }
-
-        $posts  = $posts->get();
+        $posts = $filteredPosts->get();
 
         return PostResource::collection($posts);
+
     }
 
 

@@ -19,10 +19,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::resource("posts", "PostsController")->names([
     "index" => "api.posts.index",
-    "show"  => "api.posts.show",
     "store"  => "api.posts.store",
     "create" => "api.posts.create",
     "edit" => "api.posts.edit",
     "update" => "api.posts.update",
     "destroy" => "api.posts.destroy",
 ]);
+
+Route::get("{category}/{post}", "PostsController@show")->name("api.posts.show");

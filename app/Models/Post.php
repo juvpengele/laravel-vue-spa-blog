@@ -22,5 +22,9 @@ class Post extends Model
         return substr($this->content, 0, 70) . "...";
     }
 
+    public function scopeSearch($query, $value)
+    {
+        return $query->where("title", "LIKE", "%$value%");
+    }
 
 }
