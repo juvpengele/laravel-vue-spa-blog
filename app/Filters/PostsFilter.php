@@ -31,11 +31,15 @@ class PostsFilter
 
     protected function search($value)
     {
+
+
         return $this->builder->search($value)->take(5);
     }
 
     protected function popular()
     {
+        $this->builder->getQuery()->orders = null;
+
         return $this->builder->orderBy("visits", "DESC");
     }
 
