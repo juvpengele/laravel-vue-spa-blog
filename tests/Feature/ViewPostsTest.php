@@ -15,11 +15,24 @@ class ViewPostsTest extends TestCase
     public function all_posts_can_be_fetched()
     {
         create(Post::class, [], 5);
-        $response = $this->getJson(route("api.posts.index"));
-        $response->assertStatus(200);
+
+        $response = $this->getJson(route("api.posts.index"))
+                        ->assertStatus(200);
+
         $this->assertCount(5, $response->json()["data"]);
 
     }
+
+    /** @test */
+    public function posts_are_fetched_by_pagination()
+    {
+        create(Post::class, [], 20);
+
+        $response = $this->getJson(route("api.posts.index"));
+
+        $this->assertCount(7, $response->json()["data"]);
+    }
+
 
     /** @test */
     public function posts_can_be_filtered_with_popularity()
@@ -48,7 +61,6 @@ class ViewPostsTest extends TestCase
         $searchedPostsTitle = collect($response['data'])->pluck("title");
 
         $this->assertContains($postToSearch->title, $searchedPostsTitle);
-
     }
 
 

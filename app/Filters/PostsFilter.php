@@ -15,6 +15,11 @@ class PostsFilter
         $this->filters = collect($this->filters);
     }
 
+    /**
+     * @param $request
+     * @param $builder
+     * @return mixed
+     */
     public function apply ($request, $builder)
     {
         $this->builder = $builder;
@@ -29,13 +34,18 @@ class PostsFilter
         return $this->builder;
     }
 
+    /**
+     * @param $value
+     * @return mixed
+     */
     protected function search($value)
     {
-
-
         return $this->builder->search($value)->take(5);
     }
 
+    /**
+     * @return mixed
+     */
     protected function popular()
     {
         $this->builder->getQuery()->orders = null;

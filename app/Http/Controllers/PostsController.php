@@ -11,6 +11,10 @@ class PostsController extends Controller
 {
     protected $filter;
 
+    /**
+     * PostsController constructor.
+     * @param PostsFilter $filter
+     */
     public function __construct(PostsFilter $filter)
     {
         $this->filter = $filter;
@@ -26,10 +30,9 @@ class PostsController extends Controller
             Post::latest()
         );
 
-        $posts = $filteredPosts->get();
+        $posts = $filteredPosts->paginate(7);
 
         return PostResource::collection($posts);
-
     }
 
 

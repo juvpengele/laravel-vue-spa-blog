@@ -10,18 +10,21 @@
                 <Post v-for="post in posts" :key="post.id" :post="post"/>
             </div>
         </div>
+        <Pagination :meta="pagination" @changed="paginate"></Pagination>
     </div>
 </template>
 
 <script>
     import Post from "../../components/Post";
+    import Pagination from "../../components/Pagination";
     export default {
         name: "PostsIndex",
-        components: { Post },
+        components: {Pagination, Post },
         data() {
             return {
                 posts: [],
-                endpoint: "/api/posts"
+                endpoint: "/api/posts",
+                pagination: {}
             }
         },
         created() {
@@ -30,12 +33,19 @@
         methods: {
             loadPosts(endpoint) {
                 axios.get(endpoint)
-                    .then(({data : posts}) => this.posts = posts.data)
+                    .then(({data : posts}) => {
+                        this.pagination = posts.meta;
+                        this.posts = posts.data;
+                    })
                     .catch(error => console.log(error.response));
 
             },
             getEndpoint(popular = null)  {
                return popular !== null ? `${this.endpoint}?popular=1` : this.endpoint;
+            },
+            paginate(page) {
+                let endpoint = `${this.endpoint}?page=${page}`;
+                this.loadPosts(endpoint);
             }
         },
         watch: {
