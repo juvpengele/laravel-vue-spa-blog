@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Filters\PostsFilter;
 use App\Http\Resources\PostResource;
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -49,14 +50,14 @@ class PostsController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Category $category
+     * @param Post $post
+     * @return PostResource
+     * 
      */
-    public function show($id)
+    public function show(Category $category, Post $post)
     {
-        //
+        return new PostResource($post);
     }
 
 

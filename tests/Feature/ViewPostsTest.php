@@ -64,4 +64,15 @@ class ViewPostsTest extends TestCase
     }
 
 
+    /** @test */
+    public function we_can_show_a_blog_post()
+    {
+        $post = create(Post::class);
+
+        $response = $this->getJson(route("posts.show", ["category" => $post->category, "post" => $post]));
+
+        $this->assertContains($post->slug, $response->json()["data"]);
+    }
+
+
 }
