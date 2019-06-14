@@ -6,7 +6,16 @@
             <div class="mb-1 text-muted">{{ post.created_at }}</div>
             <p class="card-text">{{ post.description}}</p>
             <div class="d-flex justify-content-between">
-                <a href="#" class="stretched-link">Continue reading</a>
+                <router-link
+                    :to="{
+                        name: 'posts.show',
+                        params: {
+                            category: post.category.slug,
+                            slug: post.slug
+                        }
+                    }"
+                    class="stretched-link"
+                >Continue reading</router-link>
                 <span> {{ post.visits_count }} views </span>
             </div>
         </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Filters\PostsFilter;
+use App\Http\Resources\PostCollection;
 use App\Http\Resources\PostResource;
 use App\Models\Category;
 use App\Models\Post;
@@ -33,7 +34,7 @@ class PostsController extends Controller
 
         $posts = $filteredPosts->paginate(7);
 
-        return PostResource::collection($posts);
+        return  PostResource::collection($posts);
     }
 
 
@@ -53,11 +54,13 @@ class PostsController extends Controller
      * @param Category $category
      * @param Post $post
      * @return PostResource
-     * 
+     *
      */
     public function show(Category $category, Post $post)
     {
-        return new PostResource($post);
+        $post->load(["category", "creator"]);
+
+        return response()->json(["data" => $post], 200);
     }
 
 

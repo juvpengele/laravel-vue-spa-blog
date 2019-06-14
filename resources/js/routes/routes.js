@@ -11,7 +11,7 @@ const routes = [
         name: "posts.index"
     },
     {
-        path: "/:slug",
+        path: "/:category/:slug",
         component: PostShow,
         name: "posts.show"
     },

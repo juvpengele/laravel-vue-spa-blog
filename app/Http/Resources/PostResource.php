@@ -18,11 +18,12 @@ class PostResource extends JsonResource
             "title" => $this->title,
             "slug"  => $this->slug,
             "description" => $this->description,
+            "content" => $this->content,
             "created_at" => $this->created_at->diffForHumans(),
             "category" => $this->category,
             "creator" => $this->creator,
             "cover_path" => $this->cover_path,
-            "visits_count" => $this->visits
+            "visits_count" => $this->visits,
         ];
     }
 }

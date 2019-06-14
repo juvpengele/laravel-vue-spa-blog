@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
+    public function getRouteKeyName()
+    {
+        return "slug";
+    }
+
     public function creator()
     {
         return $this->belongsTo(User::class, "user_id");
