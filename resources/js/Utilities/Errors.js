@@ -13,7 +13,7 @@ class Errors {
     }
 
     get(key) {
-        return this.errors[key];
+        return this.errors[key][0];
     }
 
     clear(key) {

@@ -5,9 +5,17 @@
                    @focus="showResults" @blur="removeResults" v-model="query" @keyup="loadResults">
         </div>
         <div  id="search-tab" role="tablist" class="list-group list-group-flush shadow-sm post-search--results" v-if="search">
-            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" v-for="result in results">
+            <router-link
+                :to="{
+                    name: 'posts.show',
+                    params: {
+                        category: result.category.slug,
+                        slug: result.slug
+                    }
+                }"
+            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" v-for="result in results">
                 {{ result.title }}
-            </a>
+            </router-link>
         </div>
     </div>
 
