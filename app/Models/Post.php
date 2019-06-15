@@ -32,4 +32,9 @@ class Post extends Model
         return $query->where("title", "LIKE", "%$value%");
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
 }

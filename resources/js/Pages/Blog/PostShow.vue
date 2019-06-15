@@ -8,14 +8,14 @@
 
                 <div class="blog-post">
                     <h2 class="blog-post-title">{{ post.title }}</h2>
-                    <p class="blog-post-meta">{{ diffForHumans }} by <a href="#">{{ post.creator.name }}</a></p>
+                    <p class="blog-post-meta">{{ post.created_at }} by <a href="#">{{ post.creator.name }}</a></p>
 
                     <div v-html="post.content">
                     </div>
 
                 </div><!-- /.blog-post -->
             </div>
-           <Comments />
+           <Comments :items="post.comments" />
         </div>
 
     </div>
@@ -46,11 +46,6 @@
                 axios.get(url)
                     .then(({ data : post}) => this.post = post.data)
                     .catch(error => console.log(error));
-            }
-        },
-        computed: {
-            diffForHumans() {
-                return moment(this.post.created_at).fromNow()
             }
         }
     }

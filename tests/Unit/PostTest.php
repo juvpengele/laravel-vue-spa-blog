@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Post;
 use App\User;
 use Tests\TestCase;
@@ -44,6 +45,15 @@ class PostTest extends TestCase
         $searchedPosts = Post::search("Juvenal")->get();
 
         $this->assertContains($post->title, $searchedPosts->pluck("title"));
+    }
+
+    /** @test */
+    public function it_has_comments()
+    {
+        $post = create(Post::class);
+        create(Comment::class, ["post_id" => $post->id], 2);
+
+        $this->assertCount(2, $post->comments);
     }
 
 

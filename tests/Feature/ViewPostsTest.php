@@ -75,4 +75,14 @@ class ViewPostsTest extends TestCase
     }
 
 
+    /** @test */
+    public function when_a_post_is_shown_its_visits_count_is_added()
+    {
+        $post = create(Post::class, ["visits" => 0]);
+
+        $this->getJson(route("posts.show", ["category" => $post->category, "post" => $post]));
+
+        $this->assertEquals(1, $post->fresh()->visits);
+    }
+
 }

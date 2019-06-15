@@ -23,7 +23,7 @@ class PostsController extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return PostCollection
      */
     public function index()
     {
@@ -34,7 +34,7 @@ class PostsController extends Controller
 
         $posts = $filteredPosts->paginate(7);
 
-        return  PostResource::collection($posts);
+        return new PostCollection($posts);
     }
 
 
@@ -58,9 +58,11 @@ class PostsController extends Controller
      */
     public function show(Category $category, Post $post)
     {
-        $post->load(["category", "creator"]);
+        $post->increment("visits");
 
-        return response()->json(["data" => $post], 200);
+        $post->load(["category", "creator", "comments"]);
+
+        return new PostResource($post);
     }
 
 
