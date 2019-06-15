@@ -2192,6 +2192,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CommentForm",
@@ -2217,7 +2220,7 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.$emit("submit", comment.data);
       })["catch"](function (error) {
-        console.log(error.response.data.errors);
+        return _this.errors.record(error.response.data.errors);
       });
     },
     clearForm: function clearForm() {
@@ -39447,6 +39450,9 @@ var render = function() {
         attrs: { type: "text", placeholder: "Your name", id: "name" },
         domProps: { value: _vm.form.author_name },
         on: {
+          keyup: function($event) {
+            return _vm.errors.clear("author_name")
+          },
           input: function($event) {
             if ($event.target.composing) {
               return
@@ -39454,7 +39460,13 @@ var render = function() {
             _vm.$set(_vm.form, "author_name", $event.target.value)
           }
         }
-      })
+      }),
+      _vm._v(" "),
+      _vm.errors.has("author_name")
+        ? _c("div", { staticClass: "text-danger" }, [
+            _vm._v(_vm._s(_vm.errors.get("author_name")))
+          ])
+        : _vm._e()
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "form-group col-md-6" }, [
@@ -39471,6 +39483,9 @@ var render = function() {
         attrs: { type: "text", placeholder: "Your email", id: "email" },
         domProps: { value: _vm.form.author_email },
         on: {
+          keyup: function($event) {
+            return _vm.errors.clear("author_email")
+          },
           input: function($event) {
             if ($event.target.composing) {
               return
@@ -39478,7 +39493,13 @@ var render = function() {
             _vm.$set(_vm.form, "author_email", $event.target.value)
           }
         }
-      })
+      }),
+      _vm._v(" "),
+      _vm.errors.has("author_email")
+        ? _c("div", { staticClass: "text-danger" }, [
+            _vm._v(_vm._s(_vm.errors.get("author_email")))
+          ])
+        : _vm._e()
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "form-group col-md-12" }, [
@@ -39495,6 +39516,9 @@ var render = function() {
         attrs: { id: "Your comment", rows: "3" },
         domProps: { value: _vm.form.content },
         on: {
+          keyup: function($event) {
+            return _vm.errors.clear("content")
+          },
           input: function($event) {
             if ($event.target.composing) {
               return
@@ -39502,7 +39526,13 @@ var render = function() {
             _vm.$set(_vm.form, "content", $event.target.value)
           }
         }
-      })
+      }),
+      _vm._v(" "),
+      _vm.errors.has("content")
+        ? _c("div", { staticClass: "text-danger" }, [
+            _vm._v(_vm._s(_vm.errors.get("content")))
+          ])
+        : _vm._e()
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "form-group col-md-12" }, [
@@ -55198,7 +55228,7 @@ function () {
   }, {
     key: "get",
     value: function get(key) {
-      return this.errors[key];
+      return this.errors[key][0];
     }
   }, {
     key: "clear",
