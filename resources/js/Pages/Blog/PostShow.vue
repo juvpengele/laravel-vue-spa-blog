@@ -32,7 +32,8 @@
         data() {
             return {
                 post: {
-                    creator: ""
+                    creator: "",
+                    comments: []
                 }
             }
         },

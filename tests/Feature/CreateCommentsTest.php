@@ -19,7 +19,7 @@ class CreateCommentsTest extends TestCase
 
         $comment = raw(Comment::class, ["content" => "Lorem"]);
 
-        $response = $this->postJson(route("api.comments.store", ["post" => $post]), $comment);
+        $response = $this->postJson(route("api.comments.store", ["category" => $post->category, "post" => $post]), $comment);
 
         $this->assertDatabaseHas("comments", [
             "content" => "Lorem"
@@ -34,7 +34,7 @@ class CreateCommentsTest extends TestCase
     {
         $post = create(Post::class);
 
-        $response = $this->postJson(route("api.comments.store", $post), []);
+        $response = $this->postJson(route("api.comments.store", ["category" => $post->category, "post" => $post]), []);
 
         $jsonResponse = $response->json();
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="row">
+    <div class="row col-md-12">
         <div class="card mb-3 col-md-12 p-0 shadow-sm">
             <div class="card-header d-flex justify-content-between m-0">
                 <span>{{ data.author_name}}</span>

@@ -28,4 +28,4 @@ Route::resource("posts", "PostsController")->names([
 
 Route::get("{category}/{post}", "PostsController@show")->name("api.posts.show");
 
-Route::post("{post}/comments", "CommentsController@store")->name("api.comments.store");
+Route::post("{category}/{post}/comments", "CommentsController@store")->name("api.comments.store");

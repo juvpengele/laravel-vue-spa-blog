@@ -1,9 +1,8 @@
 <template>
     <!-- comments -->
     <div class="comment-form col-md-12 border-top pt-4">
-        <CommentForm></CommentForm>
-        <Comment v-for="comment in items" :data="comment" :key="comment.id"></Comment>
-
+        <CommentForm @submit="addComment"></CommentForm>
+        <Comment v-for="comment in comments" :data="comment" :key="comment.id"></Comment>
     </div>
     <!-- End comments -->
 </template>
@@ -14,7 +13,27 @@
     export default {
         name: "Comments",
         components: { Comment, CommentForm },
-        props: ["items"]
+        props: {
+            items: {
+                type: Array,
+                required: true
+            }
+        },
+        data() {
+            return {
+                comments: []
+            }
+        },
+        methods: {
+            addComment(comment) {
+                this.comments.unshift(comment)
+            }
+        },
+        watch: {
+            items(newComments, old) {
+                this.comments = newComments;
+            }
+        }
     }
 </script>
 

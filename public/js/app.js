@@ -1756,7 +1756,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       post: {
-        creator: ""
+        creator: "",
+        comments: []
       }
     };
   },
@@ -2101,7 +2102,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2110,7 +2110,27 @@ __webpack_require__.r(__webpack_exports__);
     Comment: _Comments_Comment__WEBPACK_IMPORTED_MODULE_1__["default"],
     CommentForm: _Comments_CommentForm__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  props: ["items"]
+  props: {
+    items: {
+      type: Array,
+      required: true
+    }
+  },
+  data: function data() {
+    return {
+      comments: []
+    };
+  },
+  methods: {
+    addComment: function addComment(comment) {
+      this.comments.unshift(comment);
+    }
+  },
+  watch: {
+    items: function items(newComments, old) {
+      this.comments = newComments;
+    }
+  }
 });
 
 /***/ }),
@@ -2154,6 +2174,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Utilities_Errors__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Utilities/Errors */ "./resources/js/Utilities/Errors.js");
 //
 //
 //
@@ -2171,8 +2192,42 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "CommentForm"
+  name: "CommentForm",
+  data: function data() {
+    return {
+      errors: new _Utilities_Errors__WEBPACK_IMPORTED_MODULE_0__["default"](),
+      form: {
+        author_name: "",
+        author_email: "",
+        content: ""
+      },
+      endpoint: "/api" + window.location.pathname + "/comments"
+    };
+  },
+  methods: {
+    store: function store() {
+      var _this = this;
+
+      axios.post(this.endpoint, this.form).then(function (_ref) {
+        var comment = _ref.data;
+
+        _this.clearForm();
+
+        _this.$emit("submit", comment.data);
+      })["catch"](function (error) {
+        console.log(error.response.data.errors);
+      });
+    },
+    clearForm: function clearForm() {
+      this.form = {
+        author_name: "",
+        author_email: "",
+        content: ""
+      };
+    }
+  }
 });
 
 /***/ }),
@@ -39302,9 +39357,9 @@ var render = function() {
     "div",
     { staticClass: "comment-form col-md-12 border-top pt-4" },
     [
-      _c("CommentForm"),
+      _c("CommentForm", { on: { submit: _vm.addComment } }),
       _vm._v(" "),
-      _vm._l(_vm.items, function(comment) {
+      _vm._l(_vm.comments, function(comment) {
         return _c("Comment", { key: comment.id, attrs: { data: comment } })
       })
     ],
@@ -39333,7 +39388,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row" }, [
+  return _c("div", { staticClass: "row col-md-12" }, [
     _c("div", { staticClass: "card mb-3 col-md-12 p-0 shadow-sm" }, [
       _c(
         "div",
@@ -39377,41 +39432,89 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "form-group col-md-6" }, [
-        _c("input", {
-          staticClass: "form-control",
-          attrs: { type: "text", placeholder: "Your name", id: "name" }
-        })
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "form-group col-md-6" }, [
-        _c("input", {
-          staticClass: "form-control",
-          attrs: { type: "text", placeholder: "Your email", id: "email" }
-        })
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "form-group col-md-12" }, [
-        _c("textarea", {
-          staticClass: "form-control",
-          attrs: { id: "Your comment", rows: "3" }
-        })
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "form-group col-md-12" }, [
-        _c("button", { staticClass: "btn btn-success" }, [_vm._v("Comment")])
-      ])
+  return _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "form-group col-md-6" }, [
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.form.author_name,
+            expression: "form.author_name"
+          }
+        ],
+        staticClass: "form-control",
+        attrs: { type: "text", placeholder: "Your name", id: "name" },
+        domProps: { value: _vm.form.author_name },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.$set(_vm.form, "author_name", $event.target.value)
+          }
+        }
+      })
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "form-group col-md-6" }, [
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.form.author_email,
+            expression: "form.author_email"
+          }
+        ],
+        staticClass: "form-control",
+        attrs: { type: "text", placeholder: "Your email", id: "email" },
+        domProps: { value: _vm.form.author_email },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.$set(_vm.form, "author_email", $event.target.value)
+          }
+        }
+      })
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "form-group col-md-12" }, [
+      _c("textarea", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.form.content,
+            expression: "form.content"
+          }
+        ],
+        staticClass: "form-control",
+        attrs: { id: "Your comment", rows: "3" },
+        domProps: { value: _vm.form.content },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.$set(_vm.form, "content", $event.target.value)
+          }
+        }
+      })
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "form-group col-md-12" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-success", on: { click: _vm.store } },
+        [_vm._v("Comment")]
+      )
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -55055,6 +55158,64 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NotFound_vue_vue_type_template_id_1c8dbf98___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/Utilities/Errors.js":
+/*!******************************************!*\
+  !*** ./resources/js/Utilities/Errors.js ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Errors =
+/*#__PURE__*/
+function () {
+  function Errors() {
+    _classCallCheck(this, Errors);
+
+    this.errors = {};
+  }
+
+  _createClass(Errors, [{
+    key: "has",
+    value: function has(key) {
+      return this.errors.hasOwnProperty(key);
+    }
+  }, {
+    key: "record",
+    value: function record(errors) {
+      this.errors = errors;
+    }
+  }, {
+    key: "get",
+    value: function get(key) {
+      return this.errors[key];
+    }
+  }, {
+    key: "clear",
+    value: function clear(key) {
+      delete this.errors[key];
+    }
+  }, {
+    key: "clearAll",
+    value: function clearAll() {
+      this.errors = {};
+    }
+  }]);
+
+  return Errors;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (Errors);
 
 /***/ }),
 

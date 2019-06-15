@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\CommentRessource;
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -10,11 +11,11 @@ class CommentsController extends Controller
 {
 
     /**
-     * Store a comment
+     * @param Category $category
      * @param Post $post
      * @return CommentRessource
      */
-    public function store(Post $post)
+    public function store(Category $category, Post $post)
     {
         $data  = request()->validate([
             "author_name" => "required|min:1",
