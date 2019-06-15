@@ -9,11 +9,11 @@
                 :to="{
                     name: 'posts.show',
                     params: {
-                        category: result.category.slug,
-                        slug: result.slug
+                        slug: result.slug,
+                        category: result.category.slug
                     }
                 }"
-            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" v-for="result in results">
+            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" v-for="result in results" :key="result.id">
                 {{ result.title }}
             </router-link>
         </div>

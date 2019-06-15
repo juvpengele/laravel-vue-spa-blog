@@ -39808,14 +39808,15 @@ var render = function() {
             return _c(
               "router-link",
               {
+                key: result.id,
                 staticClass:
                   "list-group-item list-group-item-action d-flex justify-content-between align-items-center",
                 attrs: {
                   to: {
                     name: "posts.show",
                     params: {
-                      category: result.category.slug,
-                      slug: result.slug
+                      slug: result.slug,
+                      category: result.category.slug
                     }
                   }
                 }
