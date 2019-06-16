@@ -2,7 +2,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="#">SPA Blog</a>
+            <router-link class="navbar-brand" to="/">SPA Blog</router-link>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -23,9 +23,7 @@
                             Categories
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="#">PHP</a>
-                            <a class="dropdown-item" href="#">Javascript</a>
-                            <a class="dropdown-item" href="#">HTML / CSS</a>
+                            <a class="dropdown-item" href="#" v-for="category in categories">{{ category.name }}</a>
                         </div>
                     </li>
                 </ul>
@@ -40,7 +38,12 @@
     import PostSearch from "../../../components/PostSearch";
     export default {
         name: "Navbar",
-        components: {PostSearch}
+        components: { PostSearch },
+        computed: {
+            categories() {
+                return this.$store.getters.categories;
+            }
+        }
     }
 </script>
 

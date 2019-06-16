@@ -3,17 +3,9 @@
     <div class="col-md-4">
         <h3 class="aside--title mb-4">Categories</h3>
         <div class="list-group list-group-flush shadow-sm" id="list-tab" role="tablist">
-            <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="#">
-                PHP
-                <span class="badge badge-primary badge-pill">14</span>
-            </a>
-            <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="#">
-                Javascript
-                <span class="badge badge-primary badge-pill">14</span>
-            </a>
-            <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="#">
-                Java
-                <span class="badge badge-primary badge-pill">14</span>
+            <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="#" v-for="category in categories">
+                {{ category.name }}
+                <span class="badge badge-primary badge-pill">{{ category.posts_count}}</span>
             </a>
         </div>
         <div class="mt-4">
@@ -30,7 +22,15 @@
 
 <script>
     export default {
-        name: "Aside"
+        name: "Aside",
+        created() {
+            this.$store.dispatch("fetchCategories");
+        },
+        computed : {
+            categories() {
+                return this.$store.getters.categories;
+            }
+        }
     }
 </script>
 

@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import routes from "./routes/routes";
+import store from "./store/store";
 require('./bootstrap');
 
 Vue.use(VueRouter);
@@ -9,5 +10,6 @@ Vue.component('App', require('./Pages/Layouts/App').default);
 
 const app = new Vue({
     el: '#app',
-    router: new VueRouter({ routes, mode: "history" })
+    router: new VueRouter({ routes, mode: "history" }),
+    store
 });
