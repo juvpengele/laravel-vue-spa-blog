@@ -20,12 +20,22 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::resource("posts", "PostsController")->names([
     "index" => "api.posts.index",
     "store"  => "api.posts.store",
-    "create" => "api.posts.create",
     "edit" => "api.posts.edit",
     "update" => "api.posts.update",
     "destroy" => "api.posts.destroy",
 ]);
 
+Route::apiResource("categories", "CategoriesController")->names([
+    "index" => "api.categories.index",
+    "store"  => "api.categories.store",
+    "show" => "api.categories.show",
+    "update" => "api.categories.update",
+    "destroy" => "api.categories.destroy",
+]);
+
+
+
 Route::get("{category}/{post}", "PostsController@show")->name("api.posts.show");
+
 
 Route::post("{category}/{post}/comments", "CommentsController@store")->name("api.comments.store");

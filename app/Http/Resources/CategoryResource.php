@@ -16,7 +16,8 @@ class CategoryResource extends JsonResource
     {
         return [
             "name" => $this->name,
-            "slug" => $this->slug
+            "slug" => $this->slug,
+            "posts_count" => $this->posts()->count()
         ];
     }
 }
