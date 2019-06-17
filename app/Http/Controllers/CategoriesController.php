@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\PostCollection;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -64,4 +65,13 @@ class CategoriesController extends Controller
     {
         //
     }
+
+
+    public function getPosts(Category $category)
+    {
+        $posts = $category->posts()->latest()->paginate(7);
+
+        return new PostCollection($posts);
+    }
+
 }

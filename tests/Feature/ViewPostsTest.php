@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Category;
 use App\Models\Post;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -84,5 +85,22 @@ class ViewPostsTest extends TestCase
 
         $this->assertEquals(1, $post->fresh()->visits);
     }
+
+    /** @test */
+    public function we_can_show_posts_according_to_a_category()
+    {
+        $category = create(Category::class);
+
+        create(Post::class, ["category_id" => $category->id], 2);
+
+        $response = $this->getJson(route("api.categories.posts", $category));
+
+        $JsonResponse = $response->json();
+
+        $this->assertCount(2, $JsonResponse["data"]);
+
+    }
+
+
 
 }

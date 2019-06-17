@@ -2,7 +2,7 @@
     <div class="row col-md-8">
         <div class="col-md-12 ">
             <h3 class="pb-4 mb-4 font-italic border-bottom">
-                SPA Blog
+                Category
             </h3>
         </div>
         <div class="col-sm-12 col-md-12 row mt-2">
@@ -18,17 +18,18 @@
     import Post from "../../components/Post";
     import Pagination from "../../components/Pagination";
     export default {
-        name: "PostsIndex",
+        name: "CategoryIndex",
         components: { Pagination, Post },
         data() {
             return {
                 posts: [],
-                endpoint: "/api/posts",
+                endpoint: "/api/categories",
                 pagination: {}
             }
         },
         created() {
-            this.loadPosts(this.getEndpoint(this.$route.query.popular));
+            let endpoint = this.getEndpoint(this.$route.params.category);
+            this.loadPosts(endpoint);
         },
         methods: {
             loadPosts(endpoint) {
@@ -40,8 +41,8 @@
                     .catch(error => console.log(error.response));
 
             },
-            getEndpoint(popular = null)  {
-               return popular !== null ? `${this.endpoint}?popular=1` : this.endpoint;
+            getEndpoint(params) {
+                return this.endpoint + `/${params}/posts`;
             },
             paginate(page) {
                 let endpoint = `${this.endpoint}?page=${page}`;
@@ -49,8 +50,8 @@
             }
         },
         watch: {
-            '$route.query'(newQuery, oldQuery) {
-                let endpoint = this.getEndpoint(newQuery.popular);
+            '$route.params'(newParam, oldParam) {
+                let endpoint = this.getEndpoint(newParam.category);
                 this.loadPosts(endpoint);
             }
         }
