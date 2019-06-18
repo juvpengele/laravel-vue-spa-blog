@@ -38,3 +38,14 @@ Route::get("/categories/{category}/posts", "CategoriesController@getPosts")->nam
 Route::get("{category}/{post}", "PostsController@show")->name("api.posts.show");
 
 Route::post("{category}/{post}/comments", "CommentsController@store")->name("api.comments.store");
+
+
+
+Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
+
+    Route::post('login', 'AuthController@login')->name("auth.login");
+    Route::post('logout', 'AuthController@logout')->name("auth.logout");
+    Route::post('refresh', 'AuthController@refresh');
+    Route::post('me', 'AuthController@me');
+
+});
