@@ -44,7 +44,6 @@ class AuthTest extends TestCase
             ])
             ->postJson(route("auth.logout"));
 
-
         $this->assertNull(auth()->user());
     }
 

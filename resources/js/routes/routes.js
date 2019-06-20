@@ -3,6 +3,7 @@ import PostsIndex from "../Pages/Blog/PostsIndex";
 import PostShow from "../Pages/Blog/PostShow";
 import NotFound from "../Pages/NotFound";
 import CategoryIndex from "../Pages/Blog/CategoryIndex";
+import Login from "../Pages/Admin/Login";
 
 
 const routes = [
@@ -10,6 +11,14 @@ const routes = [
         path: "/",
         component: PostsIndex,
         name: "posts.index"
+    },
+    {
+        path: "/login",
+        component: Login,
+        name: "login",
+        meta: {
+            layout: "admin-layout"
+        }
     },
     {
         path: "/categories/:category",

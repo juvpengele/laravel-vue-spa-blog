@@ -1,23 +1,28 @@
 <template>
-    <div>
-        <layout-navbar></layout-navbar>
 
-        <!-- Blog section layout -->
-        <blog-layout></blog-layout>
-        <!-- End blog section layout -->
+    <!-- Layout section -->
+    <component :is="layout"></component>
+    <!-- End layout section -->
 
-        <layout-footer></layout-footer>
-    </div>
 </template>
 
 <script>
    import BlogLayout from "./BlogLayout"
-   import LayoutNavbar from "./Partials/Navbar";
-   import LayoutFooter from "./Partials/Footer";
+   import AdminLayout from "../Layouts/AdminLayout"
 
     export default {
         name: "App",
-        components: {LayoutFooter, BlogLayout, LayoutNavbar, }
+        components: { AdminLayout, BlogLayout },
+        data() {
+            return {
+                defaultLayout: "blog-layout"
+            }
+        },
+        computed: {
+            layout() {
+                return this.$route.meta.layout ? this.$route.meta.layout : this.defaultLayout;
+            }
+        }
     }
 </script>
 
