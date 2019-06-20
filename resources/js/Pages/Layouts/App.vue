@@ -9,10 +9,11 @@
 <script>
    import BlogLayout from "./BlogLayout"
    import AdminLayout from "../Layouts/AdminLayout"
+   import LoginLayout from "../Layouts/LoginLayout"
 
     export default {
         name: "App",
-        components: { AdminLayout, BlogLayout },
+        components: { AdminLayout, BlogLayout, LoginLayout },
         data() {
             return {
                 defaultLayout: "blog-layout"

@@ -3,7 +3,9 @@ import PostsIndex from "../Pages/Blog/PostsIndex";
 import PostShow from "../Pages/Blog/PostShow";
 import NotFound from "../Pages/NotFound";
 import CategoryIndex from "../Pages/Blog/CategoryIndex";
+import Dashboard from "../Pages/Admin/Dashboard";
 import Login from "../Pages/Admin/Login";
+
 
 
 const routes = [
@@ -13,11 +15,19 @@ const routes = [
         name: "posts.index"
     },
     {
+        path: "/admin",
+        component: Dashboard,
+        name: "admin.dashboard",
+        meta: {
+            layout: "admin-layout"
+        }
+    },
+    {
         path: "/login",
         component: Login,
         name: "login",
         meta: {
-            layout: "admin-layout"
+            layout: "login-layout"
         }
     },
     {

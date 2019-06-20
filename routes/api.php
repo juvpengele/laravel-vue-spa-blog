@@ -42,10 +42,8 @@ Route::post("{category}/{post}/comments", "CommentsController@store")->name("api
 
 
 Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
-
     Route::post('login', 'AuthController@login')->name("auth.login");
     Route::post('logout', 'AuthController@logout')->name("auth.logout");
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
-
 });
