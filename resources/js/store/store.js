@@ -1,5 +1,6 @@
 import Vuex from "vuex";
 import Vue from "vue";
+import auth from "../Utilities/Auth";
 
 Vue.use(Vuex);
 
@@ -10,7 +11,8 @@ const store = {
             show: false,
             message: "",
             type: "success"
-        }
+        },
+        auth
     },
     mutations : {
         FETCH_CATEGORIES(state, categories) {
@@ -22,6 +24,9 @@ const store = {
             setTimeout(() => {
                 state.flash.show = false;
             }, 3000)
+        },
+        LOGIN_AUTH(state, payload) {
+            state.auth.login(payload);
         }
     },
     actions : {
@@ -34,6 +39,12 @@ const store = {
         },
         alert(store, message, type = "success") {
             store.commit("SHOW_FLASH", message, type);
+        },
+        login(store, payload) {
+            return new Promise(function(resolve, reject) {
+                store.commit("LOGIN_AUTH", payload);
+                resolve();
+            });
         }
     },
     getters : {
@@ -42,6 +53,9 @@ const store = {
         },
         flash(state) {
             return state.flash;
+        },
+        auth(state) {
+            return state.auth
         }
     }
 };

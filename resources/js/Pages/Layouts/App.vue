@@ -1,12 +1,10 @@
 <template>
-    <div>
+    <div class="h-100">
         <!-- Layout section -->
         <component :is="layout"></component>
         <!-- End layout section -->
         <Flash></Flash>
     </div>
-
-
 </template>
 
 <script>

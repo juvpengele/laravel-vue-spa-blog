@@ -29,6 +29,8 @@
 
 <script>
     import Errors from "../../Utilities/Errors";
+    import authenticated from "../../mixins/authenticated";
+    import RedirectIfAuthenticated from "../../mixins/RedirectIfAuthenticated";
 
     export default {
         name: "Login",
@@ -42,15 +44,25 @@
                 errors: new Errors()
             }
         },
+        mixins: [authenticated, RedirectIfAuthenticated],
         methods: {
             login() {
                 axios.post(this.endpoint, this.form)
-                    .then((response) => {
-                        console.log(response)
+                    .then(({ data }) => {
+                        return this.$store.dispatch("login", data)
+                    })
+                    .then(() => {
+                        this.$store.dispatch("alert", "You are logged in successfully");
+                        this.redirect("admin.dashboard");
                     })
                     .catch(error => {
                         this.errors.record(error.response.data.errors)
                     })
+            },
+            redirect(route) {
+                this.$router.push({
+                    name: route
+                })
             }
         }
     }

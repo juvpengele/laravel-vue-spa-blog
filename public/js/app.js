@@ -1770,6 +1770,9 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Utilities_Errors__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Utilities/Errors */ "./resources/js/Utilities/Errors.js");
+/* harmony import */ var _mixins_authenticated__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/authenticated */ "./resources/js/mixins/authenticated.js");
+/* harmony import */ var _mixins_RedirectIfAuthenticated__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../mixins/RedirectIfAuthenticated */ "./resources/js/mixins/RedirectIfAuthenticated.js");
+/* harmony import */ var _mixins_RedirectIfAuthenticated__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_mixins_RedirectIfAuthenticated__WEBPACK_IMPORTED_MODULE_2__);
 //
 //
 //
@@ -1799,6 +1802,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Login",
@@ -1812,14 +1817,25 @@ __webpack_require__.r(__webpack_exports__);
       errors: new _Utilities_Errors__WEBPACK_IMPORTED_MODULE_0__["default"]()
     };
   },
+  mixins: [_mixins_authenticated__WEBPACK_IMPORTED_MODULE_1__["default"], _mixins_RedirectIfAuthenticated__WEBPACK_IMPORTED_MODULE_2___default.a],
   methods: {
     login: function login() {
       var _this = this;
 
-      axios.post(this.endpoint, this.form).then(function (response) {
-        console.log(response);
+      axios.post(this.endpoint, this.form).then(function (_ref) {
+        var data = _ref.data;
+        return _this.$store.dispatch("login", data);
+      }).then(function () {
+        _this.$store.dispatch("alert", "You are logged in successfully");
+
+        _this.redirect("admin.dashboard");
       })["catch"](function (error) {
         _this.errors.record(error.response.data.errors);
+      });
+    },
+    redirect: function redirect(route) {
+      this.$router.push({
+        name: route
       });
     }
   }
@@ -2224,8 +2240,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layouts_AdminLayout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Layouts/AdminLayout */ "./resources/js/Pages/Layouts/AdminLayout.vue");
 /* harmony import */ var _Layouts_LoginLayout__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Layouts/LoginLayout */ "./resources/js/Pages/Layouts/LoginLayout.vue");
 /* harmony import */ var _Utilities_Flash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Utilities/Flash */ "./resources/js/Utilities/Flash.vue");
-//
-//
 //
 //
 //
@@ -40347,6 +40361,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
+    { staticClass: "h-100" },
     [_c(_vm.layout, { tag: "component" }), _vm._v(" "), _c("Flash")],
     1
   )
@@ -58217,6 +58232,53 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/Utilities/Auth.js":
+/*!****************************************!*\
+  !*** ./resources/js/Utilities/Auth.js ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Storage */ "./resources/js/Utilities/Storage.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+var Auth =
+/*#__PURE__*/
+function () {
+  function Auth() {
+    _classCallCheck(this, Auth);
+  }
+
+  _createClass(Auth, [{
+    key: "login",
+    value: function login(payload) {
+      var entries = Object.entries(payload);
+      entries.forEach(function (item) {
+        _Storage__WEBPACK_IMPORTED_MODULE_0__["default"].record(item[0], item[1]);
+      });
+    }
+  }, {
+    key: "loggedIn",
+    get: function get() {
+      return _Storage__WEBPACK_IMPORTED_MODULE_0__["default"].has("access_token");
+    }
+  }]);
+
+  return Auth;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (new Auth());
+
+/***/ }),
+
 /***/ "./resources/js/Utilities/Errors.js":
 /*!******************************************!*\
   !*** ./resources/js/Utilities/Errors.js ***!
@@ -58359,6 +58421,59 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Flash_vue_vue_type_template_id_d5599a46_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/Utilities/Storage.js":
+/*!*******************************************!*\
+  !*** ./resources/js/Utilities/Storage.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Storage =
+/*#__PURE__*/
+function () {
+  function Storage() {
+    _classCallCheck(this, Storage);
+
+    this.storage = localStorage;
+  }
+
+  _createClass(Storage, [{
+    key: "record",
+    value: function record(key, value) {
+      this.storage.setItem(key, value);
+    }
+  }, {
+    key: "has",
+    value: function has(key) {
+      return this.storage.getItem(key) !== null;
+    }
+  }, {
+    key: "get",
+    value: function get(key) {
+      return this.storage.getItem(key);
+    }
+  }, {
+    key: "clear",
+    value: function clear(key) {
+      this.storage.removeItem(key);
+    }
+  }]);
+
+  return Storage;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (new Storage());
 
 /***/ }),
 
@@ -58884,6 +58999,36 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/mixins/RedirectIfAuthenticated.js":
+/*!********************************************************!*\
+  !*** ./resources/js/mixins/RedirectIfAuthenticated.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+
+/***/ "./resources/js/mixins/authenticated.js":
+/*!**********************************************!*\
+  !*** ./resources/js/mixins/authenticated.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  computed: {
+    auth: function auth() {
+      return this.$store.getters.auth;
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./resources/js/routes/routes.js":
 /*!***************************************!*\
   !*** ./resources/js/routes/routes.js ***!
@@ -58953,6 +59098,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Utilities_Auth__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Utilities/Auth */ "./resources/js/Utilities/Auth.js");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -58960,6 +59106,7 @@ function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread n
 function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 
 
 
@@ -58971,7 +59118,8 @@ var store = {
       show: false,
       message: "",
       type: "success"
-    }
+    },
+    auth: _Utilities_Auth__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   mutations: {
     FETCH_CATEGORIES: function FETCH_CATEGORIES(state, categories) {
@@ -58987,6 +59135,9 @@ var store = {
       setTimeout(function () {
         state.flash.show = false;
       }, 3000);
+    },
+    LOGIN_AUTH: function LOGIN_AUTH(state, payload) {
+      state.auth.login(payload);
     }
   },
   actions: {
@@ -59001,6 +59152,12 @@ var store = {
     alert: function alert(store, message) {
       var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "success";
       store.commit("SHOW_FLASH", message, type);
+    },
+    login: function login(store, payload) {
+      return new Promise(function (resolve, reject) {
+        store.commit("LOGIN_AUTH", payload);
+        resolve();
+      });
     }
   },
   getters: {
@@ -59009,6 +59166,9 @@ var store = {
     },
     flash: function flash(state) {
       return state.flash;
+    },
+    auth: function auth(state) {
+      return state.auth;
     }
   }
 };
