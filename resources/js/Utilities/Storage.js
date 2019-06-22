@@ -15,8 +15,12 @@ class Storage {
         return this.storage.getItem(key);
     }
 
-    clear(key) {
+    remove(key) {
         this.storage.removeItem(key)
+    }
+
+    clear() {
+        this.storage.clear();
     }
 
 }

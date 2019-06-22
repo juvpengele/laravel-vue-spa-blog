@@ -1,17 +1,27 @@
 <template>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">SPA Blog Administration</a>
+        <router-link to="/admin" class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">SPA Blog Administration</router-link>
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
-                <a class="nav-link" href="#">Sign out</a>
+                <a class="nav-link" href="#" @click.prevent="logOut">Sign out</a>
             </li>
         </ul>
     </nav>
 </template>
 
 <script>
+    import authenticated from "../../../mixins/authenticated";
+
     export default {
-        name: "Navbar.vue"
+        name: "Navbar.vue",
+        mixins: [ authenticated ],
+        methods: {
+            logOut() {
+                this.auth.logOut();
+                this.$router.push("/");
+                this.$store.dispatch("alert", { message: "You are logged out successfully"})
+            }
+        }
     }
 </script>
 

@@ -13,6 +13,10 @@ class Auth {
             Storage.record(item[0], item[1])
         });
     }
+
+    logOut() {
+        Storage.clear();
+    }
 }
 
 export default new Auth;
