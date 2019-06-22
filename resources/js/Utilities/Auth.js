@@ -15,4 +15,4 @@ class Auth {
     }
 }
 
-export default new Auth
+export default new Auth;

@@ -1719,6 +1719,7 @@ module.exports = function isBuffer (obj) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _mixins_AuthMiddleware__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../mixins/AuthMiddleware */ "./resources/js/mixins/AuthMiddleware.js");
 //
 //
 //
@@ -1754,8 +1755,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "Dashboard"
+  name: "Dashboard",
+  mixins: [_mixins_AuthMiddleware__WEBPACK_IMPORTED_MODULE_0__["default"]]
 });
 
 /***/ }),
@@ -1772,7 +1775,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Utilities_Errors__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Utilities/Errors */ "./resources/js/Utilities/Errors.js");
 /* harmony import */ var _mixins_authenticated__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/authenticated */ "./resources/js/mixins/authenticated.js");
 /* harmony import */ var _mixins_RedirectIfAuthenticated__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../mixins/RedirectIfAuthenticated */ "./resources/js/mixins/RedirectIfAuthenticated.js");
-/* harmony import */ var _mixins_RedirectIfAuthenticated__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_mixins_RedirectIfAuthenticated__WEBPACK_IMPORTED_MODULE_2__);
 //
 //
 //
@@ -1817,7 +1819,7 @@ __webpack_require__.r(__webpack_exports__);
       errors: new _Utilities_Errors__WEBPACK_IMPORTED_MODULE_0__["default"]()
     };
   },
-  mixins: [_mixins_authenticated__WEBPACK_IMPORTED_MODULE_1__["default"], _mixins_RedirectIfAuthenticated__WEBPACK_IMPORTED_MODULE_2___default.a],
+  mixins: [_mixins_authenticated__WEBPACK_IMPORTED_MODULE_1__["default"], _mixins_RedirectIfAuthenticated__WEBPACK_IMPORTED_MODULE_2__["default"]],
   methods: {
     login: function login() {
       var _this = this;
@@ -1826,7 +1828,9 @@ __webpack_require__.r(__webpack_exports__);
         var data = _ref.data;
         return _this.$store.dispatch("login", data);
       }).then(function () {
-        _this.$store.dispatch("alert", "You are logged in successfully");
+        _this.$store.dispatch("alert", {
+          message: "You are logged in successfully"
+        });
 
         _this.redirect("admin.dashboard");
       })["catch"](function (error) {
@@ -2103,6 +2107,9 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     AdminNavbar: _Layouts_AdminPartials_Navbar__WEBPACK_IMPORTED_MODULE_0__["default"],
     AdminSidebar: _Layouts_AdminPartials_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  mounted: function mounted() {
+    console.log("Ipsum");
   }
 });
 
@@ -2662,7 +2669,9 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.$emit("submit", comment.data);
 
-        _this.$store.dispatch("alert", "Your comment has been saved successfully");
+        _this.$store.dispatch("alert", {
+          message: "Your comment has been saved successfully"
+        });
       })["catch"](function (error) {
         return _this.errors.record(error.response.data.errors);
       });
@@ -58999,14 +59008,57 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/mixins/AuthMiddleware.js":
+/*!***********************************************!*\
+  !*** ./resources/js/mixins/AuthMiddleware.js ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Utilities_Auth__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Utilities/Auth */ "./resources/js/Utilities/Auth.js");
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
+    next(function (vm) {
+      if (!_Utilities_Auth__WEBPACK_IMPORTED_MODULE_0__["default"].loggedIn) {
+        vm.$store.dispatch("alert", {
+          message: "You are not allowed to access",
+          type: "danger"
+        });
+        vm.$router.push({
+          name: "posts.index"
+        });
+      }
+    });
+  }
+});
+
+/***/ }),
+
 /***/ "./resources/js/mixins/RedirectIfAuthenticated.js":
 /*!********************************************************!*\
   !*** ./resources/js/mixins/RedirectIfAuthenticated.js ***!
   \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Utilities_Auth__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Utilities/Auth */ "./resources/js/Utilities/Auth.js");
 
+/* harmony default export */ __webpack_exports__["default"] = ({
+  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
+    next(function (vm) {
+      if (_Utilities_Auth__WEBPACK_IMPORTED_MODULE_0__["default"].loggedIn) {
+        return vm.$router.push({
+          name: "admin.dashboard"
+        });
+      }
+    });
+  }
+});
 
 /***/ }),
 
@@ -59125,8 +59177,10 @@ var store = {
     FETCH_CATEGORIES: function FETCH_CATEGORIES(state, categories) {
       state.categories = [].concat(_toConsumableArray(state.categories), _toConsumableArray(categories));
     },
-    SHOW_FLASH: function SHOW_FLASH(state, message) {
-      var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "success";
+    SHOW_FLASH: function SHOW_FLASH(state, payload) {
+      var message = payload.message,
+          _payload$type = payload.type,
+          type = _payload$type === void 0 ? "success" : _payload$type;
       state.flash = {
         message: message,
         type: type,
@@ -59149,9 +59203,8 @@ var store = {
         return console.log(error);
       });
     },
-    alert: function alert(store, message) {
-      var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "success";
-      store.commit("SHOW_FLASH", message, type);
+    alert: function alert(store, payload) {
+      store.commit("SHOW_FLASH", payload);
     },
     login: function login(store, payload) {
       return new Promise(function (resolve, reject) {

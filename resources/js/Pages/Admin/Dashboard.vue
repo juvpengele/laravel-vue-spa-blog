@@ -34,8 +34,11 @@
 </template>
 
 <script>
+    import AuthMiddleware from "../../mixins/AuthMiddleware";
+
     export default {
-        name: "Dashboard"
+        name: "Dashboard",
+        mixins: [AuthMiddleware]
     }
 </script>
 

@@ -18,7 +18,9 @@ const store = {
         FETCH_CATEGORIES(state, categories) {
             state.categories = [...state.categories, ...categories ];
         },
-        SHOW_FLASH(state, message, type = "success") {
+        SHOW_FLASH(state,payload) {
+            let {message, type = "success"} = payload;
+
             state.flash = { message, type, show: true };
 
             setTimeout(() => {
@@ -37,8 +39,8 @@ const store = {
                 })
                 .catch(error => console.log(error));
         },
-        alert(store, message, type = "success") {
-            store.commit("SHOW_FLASH", message, type);
+        alert(store, payload) {
+            store.commit("SHOW_FLASH", payload);
         },
         login(store, payload) {
             return new Promise(function(resolve, reject) {

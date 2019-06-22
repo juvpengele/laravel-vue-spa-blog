@@ -19,10 +19,14 @@
     import AdminNavbar from "../Layouts/AdminPartials/Navbar";
     import AdminSidebar from "../Layouts/AdminPartials/Sidebar";
 
+
     export default {
         name: "AdminLayout",
         components: {
             AdminNavbar, AdminSidebar
+        },
+        mounted() {
+            console.log("Ipsum")
         }
     }
 </script>

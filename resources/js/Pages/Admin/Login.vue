@@ -52,7 +52,9 @@
                         return this.$store.dispatch("login", data)
                     })
                     .then(() => {
-                        this.$store.dispatch("alert", "You are logged in successfully");
+                        this.$store.dispatch("alert", {
+                            message: "You are logged in successfully"
+                        });
                         this.redirect("admin.dashboard");
                     })
                     .catch(error => {
