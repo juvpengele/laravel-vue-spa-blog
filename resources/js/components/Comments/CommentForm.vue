@@ -39,7 +39,8 @@
                 axios.post(this.endpoint, this.form)
                     .then(({ data : comment}) => {
                         this.clearForm();
-                        this.$emit("submit", comment.data)
+                        this.$emit("submit", comment.data);
+                        this.$store.dispatch("alert", "Your comment has been saved successfully")
                     })
                     .catch(error => this.errors.record(error.response.data.errors))
             },

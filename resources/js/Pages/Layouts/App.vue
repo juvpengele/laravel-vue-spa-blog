@@ -1,8 +1,11 @@
 <template>
+    <div>
+        <!-- Layout section -->
+        <component :is="layout"></component>
+        <!-- End layout section -->
+        <Flash></Flash>
+    </div>
 
-    <!-- Layout section -->
-    <component :is="layout"></component>
-    <!-- End layout section -->
 
 </template>
 
@@ -10,10 +13,11 @@
    import BlogLayout from "./BlogLayout"
    import AdminLayout from "../Layouts/AdminLayout"
    import LoginLayout from "../Layouts/LoginLayout"
+   import Flash from "../../Utilities/Flash";
 
     export default {
         name: "App",
-        components: { AdminLayout, BlogLayout, LoginLayout },
+        components: {Flash, AdminLayout, BlogLayout, LoginLayout },
         data() {
             return {
                 defaultLayout: "blog-layout"
