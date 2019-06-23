@@ -1,6 +1,6 @@
 import Vuex from "vuex";
 import Vue from "vue";
-import auth from "../Utilities/Auth";
+import AuthModule from "./modules/auth"
 
 Vue.use(Vuex);
 
@@ -12,7 +12,9 @@ const store = {
             message: "",
             type: "success"
         },
-        auth
+    },
+    modules: {
+        auth: AuthModule
     },
     mutations : {
         FETCH_CATEGORIES(state, categories) {
@@ -27,9 +29,6 @@ const store = {
                 state.flash.show = false;
             }, 3000)
         },
-        LOGIN_AUTH(state, payload) {
-            state.auth.login(payload);
-        }
     },
     actions : {
         fetchCategories(store) {
@@ -42,12 +41,6 @@ const store = {
         alert(store, payload) {
             store.commit("SHOW_FLASH", payload);
         },
-        login(store, payload) {
-            return new Promise(function(resolve, reject) {
-                store.commit("LOGIN_AUTH", payload);
-                resolve();
-            });
-        }
     },
     getters : {
         categories(state) {
@@ -56,9 +49,6 @@ const store = {
         flash(state) {
             return state.flash;
         },
-        auth(state) {
-            return state.auth
-        }
     }
 };
 

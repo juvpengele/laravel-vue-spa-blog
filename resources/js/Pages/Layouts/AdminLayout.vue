@@ -25,9 +25,6 @@
         components: {
             AdminNavbar, AdminSidebar
         },
-        mounted() {
-            console.log("Ipsum")
-        }
     }
 </script>
 

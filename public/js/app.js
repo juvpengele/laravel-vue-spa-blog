@@ -1720,6 +1720,7 @@ module.exports = function isBuffer (obj) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_AuthMiddleware__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../mixins/AuthMiddleware */ "./resources/js/mixins/AuthMiddleware.js");
+/* harmony import */ var _mixins_authenticated__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/authenticated */ "./resources/js/mixins/authenticated.js");
 //
 //
 //
@@ -1756,9 +1757,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Dashboard",
-  mixins: [_mixins_AuthMiddleware__WEBPACK_IMPORTED_MODULE_0__["default"]]
+  mixins: [_mixins_AuthMiddleware__WEBPACK_IMPORTED_MODULE_0__["default"], _mixins_authenticated__WEBPACK_IMPORTED_MODULE_1__["default"]]
 });
 
 /***/ }),
@@ -2107,9 +2109,6 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     AdminNavbar: _Layouts_AdminPartials_Navbar__WEBPACK_IMPORTED_MODULE_0__["default"],
     AdminSidebar: _Layouts_AdminPartials_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"]
-  },
-  mounted: function mounted() {
-    console.log("Ipsum");
   }
 });
 
@@ -58925,6 +58924,45 @@ var routes = [{
 
 /***/ }),
 
+/***/ "./resources/js/store/modules/auth.js":
+/*!********************************************!*\
+  !*** ./resources/js/store/modules/auth.js ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Utilities_Auth__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Utilities/Auth */ "./resources/js/Utilities/Auth.js");
+
+var AuthModule = {
+  state: {
+    auth: _Utilities_Auth__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  namespace: true,
+  mutations: {
+    LOGIN_AUTH: function LOGIN_AUTH(state, payload) {
+      state.auth.login(payload);
+    }
+  },
+  actions: {
+    login: function login(store, payload) {
+      return new Promise(function (resolve, reject) {
+        store.commit("LOGIN_AUTH", payload);
+        resolve();
+      });
+    }
+  },
+  getters: {
+    auth: function auth(state) {
+      return state.auth;
+    }
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (AuthModule);
+
+/***/ }),
+
 /***/ "./resources/js/store/store.js":
 /*!*************************************!*\
   !*** ./resources/js/store/store.js ***!
@@ -58937,7 +58975,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _Utilities_Auth__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Utilities/Auth */ "./resources/js/Utilities/Auth.js");
+/* harmony import */ var _modules_auth__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/auth */ "./resources/js/store/modules/auth.js");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -58957,8 +58995,10 @@ var store = {
       show: false,
       message: "",
       type: "success"
-    },
-    auth: _Utilities_Auth__WEBPACK_IMPORTED_MODULE_2__["default"]
+    }
+  },
+  modules: {
+    auth: _modules_auth__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   mutations: {
     FETCH_CATEGORIES: function FETCH_CATEGORIES(state, categories) {
@@ -58976,9 +59016,6 @@ var store = {
       setTimeout(function () {
         state.flash.show = false;
       }, 3000);
-    },
-    LOGIN_AUTH: function LOGIN_AUTH(state, payload) {
-      state.auth.login(payload);
     }
   },
   actions: {
@@ -58992,12 +59029,6 @@ var store = {
     },
     alert: function alert(store, payload) {
       store.commit("SHOW_FLASH", payload);
-    },
-    login: function login(store, payload) {
-      return new Promise(function (resolve, reject) {
-        store.commit("LOGIN_AUTH", payload);
-        resolve();
-      });
     }
   },
   getters: {
@@ -59006,9 +59037,6 @@ var store = {
     },
     flash: function flash(state) {
       return state.flash;
-    },
-    auth: function auth(state) {
-      return state.auth;
     }
   }
 };

@@ -35,10 +35,11 @@
 
 <script>
     import AuthMiddleware from "../../mixins/AuthMiddleware";
+    import authenticated from "../../mixins/authenticated";
 
     export default {
         name: "Dashboard",
-        mixins: [AuthMiddleware]
+        mixins: [ AuthMiddleware, authenticated ],
     }
 </script>
 
