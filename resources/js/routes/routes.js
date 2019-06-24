@@ -1,50 +1,7 @@
-//components
-import PostsIndex from "../Pages/Blog/PostsIndex";
-import PostShow from "../Pages/Blog/PostShow";
-import NotFound from "../Pages/NotFound";
-import CategoryIndex from "../Pages/Blog/CategoryIndex";
-import Dashboard from "../Pages/Admin/Dashboard";
-import Login from "../Pages/Admin/Login";
+//Routes
+import adminRoutes from "./admin"
+import publicRoutes from "./public"
 
-
-
-const routes = [
-    {
-        path: "/",
-        component: PostsIndex,
-        name: "posts.index"
-    },
-    {
-        path: "/admin",
-        component: Dashboard,
-        name: "admin.dashboard",
-        meta: {
-            layout: "admin-layout"
-        }
-    },
-    {
-        path: "/login",
-        component: Login,
-        name: "login",
-        meta: {
-            layout: "login-layout"
-        }
-    },
-    {
-        path: "/categories/:category",
-        component: CategoryIndex,
-        name: "categories.index"
-    },
-    {
-        path: "/:category/:slug",
-        component: PostShow,
-        name: "posts.show"
-    },
-    {
-        path: "*",
-        component: NotFound,
-        name: "not found"
-    }
-];
+const routes = [...adminRoutes, ...publicRoutes];
 
 export default routes;

@@ -45,6 +45,9 @@
             }
         },
         mixins: [authenticated, RedirectIfAuthenticated],
+        created() {
+            document.title = "Login | SPA Blog";
+        },
         methods: {
             login() {
                 axios.post(this.endpoint, this.form)

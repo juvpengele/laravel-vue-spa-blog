@@ -5,6 +5,7 @@
         <p>
             <a href="#">Back to top</a>
         </p>
+        <router-link to="/login" class="text-right">Administration</router-link>
     </footer>
     <!-- End Foooter -->
 </template>

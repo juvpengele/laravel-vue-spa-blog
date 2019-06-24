@@ -20,4 +20,31 @@ class CategoryTest extends TestCase
 
         $this->assertCount(2, $category->posts);
     }
+
+    /** @test */
+    public function many_categories_can_be_registered_at_the_same_time()
+    {
+        Category::register(["php", "java", "html"]);
+
+        $this->assertCount(3, Category::all());
+    }
+
+    /** @test */
+    public function categories_are_registered_once()
+    {
+        Category::register(["php", "java", "html", "java"]);
+
+        $this->assertCount(3, Category::all());
+    }
+
+    /** @test */
+    public function existing_categories_can_not_be_registered()
+    {
+        create(Category::class, ["name" => "php"]);
+
+        Category::register(["php", "java", "html", "java"]);
+
+        $this->assertCount(3, Category::all());
+    }
+
 }

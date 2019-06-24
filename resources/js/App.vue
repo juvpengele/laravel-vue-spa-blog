@@ -8,14 +8,14 @@
 </template>
 
 <script>
-   import BlogLayout from "./BlogLayout"
-   import AdminLayout from "../Layouts/AdminLayout"
-   import LoginLayout from "../Layouts/LoginLayout"
-   import Flash from "../../Utilities/Flash";
+   import BlogLayout from "./Pages/Layouts/BlogLayout"
+   import AdminLayout from "./Pages/Layouts/AdminLayout"
+   import LoginLayout from "./Pages/Layouts/LoginLayout"
+   import Flash from "./Utilities/Flash";
 
     export default {
         name: "App",
-        components: {Flash, AdminLayout, BlogLayout, LoginLayout },
+        components: { Flash, AdminLayout, BlogLayout, LoginLayout },
         data() {
             return {
                 defaultLayout: "blog-layout"

@@ -40,6 +40,10 @@
     export default {
         name: "Dashboard",
         mixins: [ AuthMiddleware, authenticated ],
+        created() {
+            document.title = "Dashboard | SPA Blog"
+        }
+
     }
 </script>
 

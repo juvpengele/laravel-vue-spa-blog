@@ -6,7 +6,7 @@ require('./bootstrap');
 
 Vue.use(VueRouter);
 
-Vue.component('App', require('./Pages/Layouts/App').default);
+Vue.component('App', require('./App').default);
 
 const app = new Vue({
     el: '#app',

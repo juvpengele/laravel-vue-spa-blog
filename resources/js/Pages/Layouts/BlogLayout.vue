@@ -15,8 +15,8 @@
 
 <script>
     import LayoutAside from "./BlogPartials/Aside"
-    import LayoutFooter from "./Partials/Footer"
-    import LayoutNavbar from "./Partials/Navbar"
+    import LayoutFooter from "./BlogPartials/Footer"
+    import LayoutNavbar from "./BlogPartials/Navbar"
 
     export default {
         name: "BlogLayout",

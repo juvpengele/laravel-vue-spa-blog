@@ -6,6 +6,7 @@ use App\Http\Resources\CategoryResource;
 use App\Http\Resources\PostCollection;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CategoriesController extends Controller
 {
@@ -22,14 +23,17 @@ class CategoriesController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @param Request $request
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        $categoriesNames = explode(",", $request->get("names"));
+
+        $categoriesSaved = Category::register($categoriesNames);
+
+        return CategoryResource::collection($categoriesSaved);
     }
 
     /**
@@ -44,26 +48,36 @@ class CategoriesController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Category $category
+     * @return CategoryResource
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $request->validate([ "name" => "required|max:255"]);
+
+        if($request->name !== $category->name) {
+            $request->validate(["name" => "unique:categories"]);
+        }
+
+        $category->update([
+            "name" => $request->name,
+            "slug" => Str::slug($request->name)
+        ]);
+
+        return new CategoryResource($category);
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
+     * @param Category $category
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+
+        return response()->json([], 204);
     }
 
 
