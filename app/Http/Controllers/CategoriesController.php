@@ -29,6 +29,8 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([ "names" => "required" ]);
+
         $categoriesNames = explode(",", $request->get("names"));
 
         $categoriesSaved = Category::register($categoriesNames);

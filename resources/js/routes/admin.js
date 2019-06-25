@@ -1,6 +1,7 @@
 import Dashboard from "../Pages/Admin/Dashboard";
 import Login from "../Pages/Admin/Login";
 import CategoriesIndex from "../Pages/Admin/Categories/CategoriesIndex";
+import CategoriesCreate from "../Pages/Admin/Categories/CategoriesCreate";
 
 
 const routes = [
@@ -16,6 +17,14 @@ const routes = [
         path: "/admin/categories",
         component: CategoriesIndex,
         name: "admin.categories.index",
+        meta: {
+            layout: "admin-layout"
+        }
+    },
+    {
+        path: "/admin/categories/create",
+        component: CategoriesCreate,
+        name: "admin.categories.create",
         meta: {
             layout: "admin-layout"
         }

@@ -29,6 +29,9 @@ const store = {
                 state.flash.show = false;
             }, 3000)
         },
+        ADD_CATEGORIES(state, categories) {
+            state.categories = [...state.categories, ...categories ];
+        }
     },
     actions : {
         fetchCategories(store) {
@@ -37,6 +40,12 @@ const store = {
                     store.commit("FETCH_CATEGORIES", categories.data);
                 })
                 .catch(error => console.log(error));
+        },
+        storeCategories(store, payload) {
+            return new Promise((resolve, reject) => {
+                store.commit("ADD_CATEGORIES", payload)
+                resolve();
+            })
         },
         alert(store, payload) {
             store.commit("SHOW_FLASH", payload);

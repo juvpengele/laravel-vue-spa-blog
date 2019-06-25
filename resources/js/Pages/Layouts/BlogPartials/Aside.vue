@@ -25,9 +25,6 @@
 <script>
     export default {
         name: "Aside",
-        created() {
-            this.$store.dispatch("fetchCategories");
-        },
         computed : {
             categories() {
                 return this.$store.getters.categories;

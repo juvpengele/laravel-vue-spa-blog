@@ -14,10 +14,10 @@
             </span>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link text-info" href="#">
+                    <router-link class="nav-link text-info" :to="{name: 'admin.categories.index'}">
                         <i class="fa fa-plus-circle"></i>
                         Add Categories
-                    </a>
+                    </router-link>
                 </li>
                 <li class="nav-item">
                     <router-link :to="{ name: 'admin.categories.index'}" class="nav-link text-info">

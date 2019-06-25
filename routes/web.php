@@ -13,6 +13,6 @@
 
 
 
-Route::any('{any?}/{any1?}', function(){
+Route::any('{any?}/{any1?}/{any2?}', function(){
     return view("layouts.app");
 });
