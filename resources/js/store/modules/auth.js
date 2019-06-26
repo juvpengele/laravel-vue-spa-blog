@@ -8,6 +8,7 @@ const AuthModule = {
     mutations : {
         LOGIN_AUTH(state, payload) {
             state.auth.login(payload);
+
         }
     },
     actions : {

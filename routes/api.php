@@ -36,7 +36,6 @@ Route::get("/categories/{category}/posts", "CategoriesController@getPosts")->nam
 
 
 Route::get("{category}/{post}", "PostsController@show")->name("api.posts.show");
-
 Route::post("{category}/{post}/comments", "CommentsController@store")->name("api.comments.store");
 
 

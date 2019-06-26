@@ -12,6 +12,7 @@ class Auth {
         entries.forEach((item) => {
             Storage.record(item[0], item[1])
         });
+
     }
 
     logOut() {

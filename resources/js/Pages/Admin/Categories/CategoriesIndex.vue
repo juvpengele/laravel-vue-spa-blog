@@ -6,23 +6,7 @@
             </router-link>
         </div>
 
-        <table class="table">
-            <thead class="thead-info">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="(category, index) in categories">
-                <th scope="row">{{ index + 1}}</th>
-                <td>{{ category.name }}</td>
-                <td>#</td>
-            </tr>
-
-            </tbody>
-        </table>
+        <categories :categories="categories"></categories>
 
     </div>
 </template>
@@ -30,9 +14,11 @@
 <script>
     import authenticated from "../../../mixins/authenticated";
     import AuthMiddleware from "../../../mixins/AuthMiddleware";
+    import Categories from "../../../components/Categories";
 
     export default {
         name: "CategoriesIndex",
+        components: {Categories},
         mixins: [authenticated, AuthMiddleware],
         data() {
             return {
@@ -40,7 +26,7 @@
             }
         },
         mounted() {
-            console.log(this.$store.getters.categories)
+            document.title = "Manage categories | SPA Blog"
         },
         computed: {
             categories() {
@@ -49,7 +35,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>

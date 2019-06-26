@@ -14,7 +14,7 @@
             </span>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <router-link class="nav-link text-info" :to="{name: 'admin.categories.index'}">
+                    <router-link class="nav-link text-info" :to="{name: 'admin.categories.create'}">
                         <i class="fa fa-plus-circle"></i>
                         Add Categories
                     </router-link>

@@ -29,6 +29,7 @@
         },
         created() {
             this.loadPosts(this.getEndpoint(this.$route.query.popular));
+            document.title = "SPA Blog"
         },
         methods: {
             loadPosts(endpoint) {

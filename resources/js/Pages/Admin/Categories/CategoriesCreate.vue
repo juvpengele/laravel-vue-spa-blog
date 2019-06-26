@@ -11,9 +11,11 @@
 <script>
     import TagInput from "../../../Utilities/InputTag";
     import Errors from "../../../Utilities/Errors";
+    import AddToken from "../../../mixins/AddToken";
     export default {
         name: "CategoriesCreate",
         components: { TagInput },
+        mixins: [AddToken],
         data() {
             return {
                 categories: "",
@@ -21,16 +23,19 @@
                 errors: new Errors()
             }
         },
+        created() {
+            document.title = "Add categories | SPA Blog"
+        },
         methods: {
             create() {
                 axios.post(this.endpoint, { names: this.categories })
                     .then(({ data : categories}) => {
-                        this.$store.dispatch("storeCategories", categories.data)
-                        .then(() => {
-                            this.$store.dispatch("alert", {message:  "Categories saved successfully"});
-                        });
-                        this.$router.push({ name: "admin.categories.index" })
-                    }).catch(error => {
+                        return this.$store.dispatch("removeCategory", categories.data)
+                    })
+                    .then(() => {
+                        this.$store.dispatch("alert", { message:  "Categories deleted successfully"});
+                    }).
+                    catch(error => {
                         this.errors.record(error.response.data.errors)
                     })
             }
