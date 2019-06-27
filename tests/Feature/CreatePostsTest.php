@@ -86,4 +86,15 @@ class CreatePostsTest extends TestCase
         $this->assertCount(0, Post::all());
     }
 
+    /** @test */
+    public function a_post_can_be_deleted()
+    {
+        $post = create(Post::class);
+
+        $this->deleteJson(route("api.posts.destroy", $post));
+
+        $this->assertCount(0, Post::all());
+
+    }
+
 }

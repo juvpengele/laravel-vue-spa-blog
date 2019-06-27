@@ -39,4 +39,11 @@ class Post extends Model
         return $this->hasMany(Comment::class)->latest();
     }
 
+    public function getCoverAttribute()
+    {
+        $parts = explode("/", $this->cover_path);
+
+        return end($parts);
+    }
+
 }

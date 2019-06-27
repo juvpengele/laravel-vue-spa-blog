@@ -14,7 +14,7 @@ $factory->define(Post::class, function (Faker $faker) {
         "category_id" => factory(\App\Models\Category::class)->create()->id,
         "user_id" => factory(\App\User::class)->create()->id,
         "online" => true,
-        "cover_path" => public_path("/images/cover.png"),
+        "cover_path" => asset("storage/covers/cover.jpg"),
         "visits" => 0
     ];
 });

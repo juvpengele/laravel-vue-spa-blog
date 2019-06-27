@@ -12,7 +12,7 @@ class PostsTableSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        $cover_path = asset("storage/covers/default.jpg");
+        $cover_path = asset("cover.jpg");
 
         factory(\App\Models\Category::class, 5)->create();
 
