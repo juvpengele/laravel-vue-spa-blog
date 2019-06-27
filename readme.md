@@ -1,6 +1,8 @@
 ## About the application
 
 WIP
+
+
 It is a blog made with Laravel as the back-end framework and Vuejs as the front-end framework
 
 -----
