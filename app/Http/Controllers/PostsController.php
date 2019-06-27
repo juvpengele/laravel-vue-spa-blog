@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Filters\PostsFilter;
+use App\Http\Requests\PostRequest;
 use App\Http\Resources\PostCollection;
 use App\Http\Resources\PostResource;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Str;
 
 class PostsController extends Controller
 {
@@ -38,16 +41,28 @@ class PostsController extends Controller
     }
 
 
-
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param PostRequest $request
+     * @return PostResource
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        //
+
+        $data = $request->data();
+        $data["cover_path"] = $this->uploadCover($request->file("cover"));
+
+        $post = Post::create($data);
+
+        return new PostResource($post);
+    }
+
+    private function uploadCover(UploadedFile $file) : string
+    {
+        $filename = time() . "." . $file->getClientOriginalExtension();
+
+        $file->storeAs("public/covers", $filename);
+
+        return storage_path("public/covers". $filename);
     }
 
     /**

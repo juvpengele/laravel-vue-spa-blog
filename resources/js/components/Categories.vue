@@ -1,5 +1,5 @@
 <template>
-    <table class="table">
+    <table class="table datatable">
         <thead class="thead-info bg-info text-white">
         <tr>
             <th scope="col">#</th>
@@ -63,7 +63,7 @@
             confirm(message) {
                 return confirm(message);
             }
-        }
+        },
     }
 </script>
 

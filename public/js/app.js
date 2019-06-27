@@ -40101,12 +40101,12 @@ var render = function() {
     [
       _c(
         "div",
-        { staticClass: "my-2" },
+        { staticClass: "my-2 d-flex justify-content-end" },
         [
           _c(
             "router-link",
             {
-              staticClass: "btn btn-info float-right mb-2",
+              staticClass: "btn btn-info mb-2",
               attrs: { to: { name: "admin.categories.create" } }
             },
             [
@@ -41376,7 +41376,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("table", { staticClass: "table" }, [
+  return _c("table", { staticClass: "table datatable" }, [
     _vm._m(0),
     _vm._v(" "),
     _c(
@@ -59522,6 +59522,10 @@ if (token) {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
+
+
+$(document).ready(function () {// $(".datatable").DataTable();
+});
 
 /***/ }),
 

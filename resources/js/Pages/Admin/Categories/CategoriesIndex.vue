@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
-        <div class="my-2">
-            <router-link :to="{name: 'admin.categories.create'}" class="btn btn-info float-right mb-2">
+        <div class="my-2 d-flex justify-content-end">
+            <router-link :to="{name: 'admin.categories.create'}" class="btn btn-info mb-2">
                 Add a category <i class="fa fa-plus-circle"></i>
             </router-link>
         </div>
