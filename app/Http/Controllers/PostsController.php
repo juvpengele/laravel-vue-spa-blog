@@ -27,6 +27,7 @@ class PostsController extends Controller
     }
 
     /**
+     * Fetch filtered posts that have an online status
      * @return PostCollection
      */
     public function index()
@@ -36,9 +37,17 @@ class PostsController extends Controller
             Post::latest()
         );
 
-        $posts = $filteredPosts->paginate(7);
+        $posts = $filteredPosts->online()->paginate(7);
 
         return new PostCollection($posts);
+    }
+
+    /**
+     * Fetch all posts (online or not)
+     */
+    public function all()
+    {
+        return new PostCollection(Post::all());
     }
 
 

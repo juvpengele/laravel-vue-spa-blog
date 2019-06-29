@@ -5,9 +5,7 @@
                 Add a category <i class="fa fa-plus-circle"></i>
             </router-link>
         </div>
-
         <categories :categories="categories"></categories>
-
     </div>
 </template>
 

@@ -17,6 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get("/posts/all", "PostsController@all");
 Route::resource("posts", "PostsController")->names([
     "index" => "api.posts.index",
     "store"  => "api.posts.store",

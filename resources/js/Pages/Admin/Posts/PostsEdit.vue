@@ -4,7 +4,7 @@
 
 <script>
     export default {
-        name: "CategoriesTable"
+        name: "PostsEdit"
     }
 </script>
 

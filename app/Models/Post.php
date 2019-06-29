@@ -46,4 +46,9 @@ class Post extends Model
         return end($parts);
     }
 
+    public function scopeOnline($query, $condition = true)
+    {
+        return $query->where(["online" => $condition]);
+    }
+
 }

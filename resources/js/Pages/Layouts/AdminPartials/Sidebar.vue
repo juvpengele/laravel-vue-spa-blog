@@ -26,6 +26,23 @@
                     </router-link>
                 </li>
             </ul>
+            <span class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span>Posts</span>
+            </span>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <router-link class="nav-link text-info" :to="{name: 'admin.posts.create'}">
+                        <i class="fa fa-plus-circle"></i>
+                        Add posts
+                    </router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link :to="{ name: 'admin.posts.index'}" class="nav-link text-info">
+                        <i class="fa fa-list-ul"></i>
+                        Manage posts
+                    </router-link>
+                </li>
+            </ul>
         </div>
     </nav>
 </template>

@@ -21,6 +21,7 @@ class PostResource extends JsonResource
             "content" => $this->content,
             "created_at" => $this->created_at->diffForHumans(),
             "category" => new CategoryResource($this->category),
+            "online" => !! $this->online,
             "creator" => $this->creator,
             "cover_path" => $this->cover_path,
             "visits_count" => $this->visits,
