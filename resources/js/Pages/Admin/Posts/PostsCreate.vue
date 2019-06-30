@@ -3,13 +3,15 @@
         <form action="" @submit.prevent="post">
             <div class="card mb-3">
                 <cover-uploader @loaded="updateCover"></cover-uploader>
+                <small class="form-text text-danger" v-if="errors.has('cover')">{{ errors.get('cover') }}</small>
             </div>
             <div class="form-group">
                 <label for="category">Category</label>
-                <select class="custom-select" id="category" v-model="form.category_id">
+                <select class="custom-select" id="category" v-model="form.category_id" @change="errors.clear('category_id')">
                     <option selected="" disabled></option>
                     <option :value="category.id" v-for="category in categories">{{ category.name }}</option>
                 </select>
+                <small class="form-text text-danger" v-if="errors.has('category_id')">{{ errors.get('category_id') }}</small>
             </div>
             <div class="form-group">
                 <div class="custom-control custom-switch">
@@ -20,13 +22,14 @@
             <div class="form-group">
                 <div class="form-group">
                     <label for="title">Title</label>
-                    <input type="text" class="form-control" id="title" v-model="form.title">
-                    <!--<small id="emailHelp" class="form-text text-danger">We'll never share your email with anyone else.</small>-->
+                    <input type="text" class="form-control" id="title" v-model="form.title" @keydown="errors.clear('title')">
+                    <small class="form-text text-danger" v-if="errors.has('title')">{{ errors.get('title') }}</small>
                 </div>
             </div>
             <div class="form-group">
                 <label for="content">Content</label>
-                <markdown-editor v-model="form.content" id="content"></markdown-editor>
+                <markdown-editor v-model="form.content" id="content" @keydown="errors.clear('content')"></markdown-editor>
+                <small class="form-text text-danger" v-if="errors.has('content')">{{ errors.get('content') }}</small>
             </div>
             <div class="form-group">
                 <button class="btn btn-success btn-lg" type="submit">Post <i class="fa fa-check"></i></button>
@@ -41,6 +44,7 @@
     import AddToken from "../../../mixins/AddToken";
     import AuthMiddleware from "../../../mixins/AuthMiddleware";
     import authenticated from "../../../mixins/authenticated";
+    import Errors from "../../../Utilities/Errors";
 
     export default {
         components: {CoverUploader, MarkdownEditor},
@@ -54,11 +58,16 @@
                     content: "",
                     online: false
                 },
-                endpoint: "/api/posts"
+                endpoint: "/api/posts",
+                errors: new Errors()
             }
         },
         methods: {
             updateCover(cover) {
+                if(this.errors.has('cover')) {
+                    console.log(this.errors.get('cover'))
+                    this.errors.clear('cover');
+                }
                 this.form.cover = cover;
             },
             post() {
@@ -94,7 +103,15 @@
                         });
                     })
                     .catch(error => {
-                        console.log(error.response)
+                        if(error.response.data.errors) {
+                            this.errors.record(error.response.data.errors)
+                        } else {
+                            this.$store.dispatch("alert", {
+                                message: "An error occured during request",
+                                type: "danger"
+                            })
+                        }
+
                     })
             }
         },

@@ -2126,6 +2126,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_AddToken__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../mixins/AddToken */ "./resources/js/mixins/AddToken.js");
 /* harmony import */ var _mixins_AuthMiddleware__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../mixins/AuthMiddleware */ "./resources/js/mixins/AuthMiddleware.js");
 /* harmony import */ var _mixins_authenticated__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../mixins/authenticated */ "./resources/js/mixins/authenticated.js");
+/* harmony import */ var _Utilities_Errors__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../Utilities/Errors */ "./resources/js/Utilities/Errors.js");
 //
 //
 //
@@ -2163,6 +2164,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+
 
 
 
@@ -2183,11 +2188,17 @@ __webpack_require__.r(__webpack_exports__);
         content: "",
         online: false
       },
-      endpoint: "/api/posts"
+      endpoint: "/api/posts",
+      errors: new _Utilities_Errors__WEBPACK_IMPORTED_MODULE_5__["default"]()
     };
   },
   methods: {
     updateCover: function updateCover(cover) {
+      if (this.errors.has('cover')) {
+        console.log(this.errors.get('cover'));
+        this.errors.clear('cover');
+      }
+
       this.form.cover = cover;
     },
     post: function post() {
@@ -2220,7 +2231,14 @@ __webpack_require__.r(__webpack_exports__);
           name: "admin.posts.index"
         });
       })["catch"](function (error) {
-        console.log(error.response);
+        if (error.response.data.errors) {
+          _this.errors.record(error.response.data.errors);
+        } else {
+          _this.$store.dispatch("alert", {
+            message: "An error occured during request",
+            type: "danger"
+          });
+        }
       });
     }
   },
@@ -59925,7 +59943,15 @@ var render = function() {
         _c(
           "div",
           { staticClass: "card mb-3" },
-          [_c("cover-uploader", { on: { loaded: _vm.updateCover } })],
+          [
+            _c("cover-uploader", { on: { loaded: _vm.updateCover } }),
+            _vm._v(" "),
+            _vm.errors.has("cover")
+              ? _c("small", { staticClass: "form-text text-danger" }, [
+                  _vm._v(_vm._s(_vm.errors.get("cover")))
+                ])
+              : _vm._e()
+          ],
           1
         ),
         _vm._v(" "),
@@ -59946,21 +59972,26 @@ var render = function() {
               staticClass: "custom-select",
               attrs: { id: "category" },
               on: {
-                change: function($event) {
-                  var $$selectedVal = Array.prototype.filter
-                    .call($event.target.options, function(o) {
-                      return o.selected
-                    })
-                    .map(function(o) {
-                      var val = "_value" in o ? o._value : o.value
-                      return val
-                    })
-                  _vm.$set(
-                    _vm.form,
-                    "category_id",
-                    $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-                  )
-                }
+                change: [
+                  function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.form,
+                      "category_id",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  },
+                  function($event) {
+                    return _vm.errors.clear("category_id")
+                  }
+                ]
               }
             },
             [
@@ -59973,7 +60004,13 @@ var render = function() {
               })
             ],
             2
-          )
+          ),
+          _vm._v(" "),
+          _vm.errors.has("category_id")
+            ? _c("small", { staticClass: "form-text text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.get("category_id")))
+              ])
+            : _vm._e()
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group" }, [
@@ -60044,6 +60081,9 @@ var render = function() {
               attrs: { type: "text", id: "title" },
               domProps: { value: _vm.form.title },
               on: {
+                keydown: function($event) {
+                  return _vm.errors.clear("title")
+                },
                 input: function($event) {
                   if ($event.target.composing) {
                     return
@@ -60051,7 +60091,13 @@ var render = function() {
                   _vm.$set(_vm.form, "title", $event.target.value)
                 }
               }
-            })
+            }),
+            _vm._v(" "),
+            _vm.errors.has("title")
+              ? _c("small", { staticClass: "form-text text-danger" }, [
+                  _vm._v(_vm._s(_vm.errors.get("title")))
+                ])
+              : _vm._e()
           ])
         ]),
         _vm._v(" "),
@@ -60063,6 +60109,11 @@ var render = function() {
             _vm._v(" "),
             _c("markdown-editor", {
               attrs: { id: "content" },
+              on: {
+                keydown: function($event) {
+                  return _vm.errors.clear("content")
+                }
+              },
               model: {
                 value: _vm.form.content,
                 callback: function($$v) {
@@ -60070,7 +60121,13 @@ var render = function() {
                 },
                 expression: "form.content"
               }
-            })
+            }),
+            _vm._v(" "),
+            _vm.errors.has("content")
+              ? _c("small", { staticClass: "form-text text-danger" }, [
+                  _vm._v(_vm._s(_vm.errors.get("content")))
+                ])
+              : _vm._e()
           ],
           1
         ),
