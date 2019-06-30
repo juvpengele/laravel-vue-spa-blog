@@ -1,6 +1,6 @@
 <template>
     <label for="cover" class="cover_label">
-        <img style="height: 500px; width: 500px; display: block;" :src="image" alt="Card image" class="mx-auto">
+        <img style="height: 500px; width: 700px; display: block;" :src="image" alt="Card image" class="mx-auto">
         <input type="file" name="cover" ref="cover" hidden @change="upload" id="cover">
     </label>
 </template>

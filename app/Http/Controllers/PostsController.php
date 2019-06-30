@@ -17,6 +17,8 @@ class PostsController extends Controller
 {
     protected $filter;
 
+
+
     /**
      * PostsController constructor.
      * @param PostsFilter $filter
@@ -57,7 +59,6 @@ class PostsController extends Controller
      */
     public function store(PostRequest $request)
     {
-
         $data = $request->data();
         $data["cover_path"] = $this->uploadCover($request->file("cover"));
 
@@ -72,7 +73,7 @@ class PostsController extends Controller
 
         $file->storeAs("public/covers", $filename);
 
-        return storage_path("public/covers". $filename);
+        return asset("storage/public/covers". $filename);
     }
 
     /**

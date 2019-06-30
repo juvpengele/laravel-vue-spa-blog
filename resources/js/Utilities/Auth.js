@@ -6,6 +6,10 @@ class Auth {
         return Storage.has("access_token");
     }
 
+    get token() {
+        return Storage.get("access_token")
+    }
+
     login(payload) {
         const entries = Object.entries(payload);
 
@@ -18,6 +22,7 @@ class Auth {
     logOut() {
         Storage.clear();
     }
+
 }
 
 export default new Auth;
