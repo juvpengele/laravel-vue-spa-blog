@@ -38,6 +38,7 @@ class PostRequest extends FormRequest
             "slug" => Str::slug($this->get("title")),
             "visits" => 0,
             "user_id" => auth()->id(),
+            "online" => $this->get("online") === "true"
         ])->only(["title", "slug", "content", "visits", "user_id", "category_id", "online"]);
     }
 

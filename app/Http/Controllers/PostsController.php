@@ -36,10 +36,10 @@ class PostsController extends Controller
     {
         $filteredPosts  = $this->filter->apply(
             request()->all(),
-            Post::latest()
+            Post::online()->latest()
         );
 
-        $posts = $filteredPosts->online()->paginate(7);
+        $posts = $filteredPosts->paginate(7);
 
         return new PostCollection($posts);
     }

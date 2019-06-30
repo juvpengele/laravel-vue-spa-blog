@@ -94,7 +94,40 @@ class CreatePostsTest extends TestCase
         $this->deleteJson(route("api.posts.destroy", $post));
 
         $this->assertCount(0, Post::all());
+    }
 
+    /** @test */
+    public function to_be_online_a_post_depends_on_the_online_parameter()
+    {
+        $this->withoutExceptionHandling();
+
+        Storage::fake('avatars');
+
+        $data = [
+            "title" => "Lorem ipsum",
+            "content" => $this->faker->paragraph,
+            "category_id" => create(Category::class)->id,
+            "online" => false,
+            "cover" => UploadedFile::fake()->image('avatar.jpg')
+        ];
+
+        $this->postJson(route("api.posts.store"), $data);
+
+        $this->assertCount(1, Post::online(false)->get());
+
+        $this->deleteStoreFile(Post::all()->pluck("cover")->toArray());
+
+    }
+
+    private function deleteStoreFile(array $filenames) : void
+    {
+        if(is_array($filenames)) {
+            foreach ($filenames as $filename) {
+                Storage::delete("public/covers", $filename);
+            }
+        } else {
+            Storage::delete("public/covers", $filenames);
+        }
     }
 
 }

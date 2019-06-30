@@ -2157,6 +2157,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2174,7 +2180,8 @@ __webpack_require__.r(__webpack_exports__);
         cover: "",
         category_id: "",
         title: "",
-        content: ""
+        content: "",
+        online: false
       },
       endpoint: "/api/posts"
     };
@@ -2194,6 +2201,7 @@ __webpack_require__.r(__webpack_exports__);
       formData.append("title", this.form.title);
       formData.append("content", this.form.content);
       formData.append("category_id", this.form.category_id);
+      formData.append("online", this.form.online);
       this.store(formData, config);
     },
     store: function store(data, config) {
@@ -59966,6 +59974,57 @@ var render = function() {
             ],
             2
           )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("div", { staticClass: "custom-control custom-switch" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.form.online,
+                  expression: "form.online"
+                }
+              ],
+              staticClass: "custom-control-input",
+              attrs: { type: "checkbox", id: "online", checked: "" },
+              domProps: {
+                checked: Array.isArray(_vm.form.online)
+                  ? _vm._i(_vm.form.online, null) > -1
+                  : _vm.form.online
+              },
+              on: {
+                change: function($event) {
+                  var $$a = _vm.form.online,
+                    $$el = $event.target,
+                    $$c = $$el.checked ? true : false
+                  if (Array.isArray($$a)) {
+                    var $$v = null,
+                      $$i = _vm._i($$a, $$v)
+                    if ($$el.checked) {
+                      $$i < 0 && _vm.$set(_vm.form, "online", $$a.concat([$$v]))
+                    } else {
+                      $$i > -1 &&
+                        _vm.$set(
+                          _vm.form,
+                          "online",
+                          $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                        )
+                    }
+                  } else {
+                    _vm.$set(_vm.form, "online", $$c)
+                  }
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c(
+              "label",
+              { staticClass: "custom-control-label", attrs: { for: "online" } },
+              [_vm._v("Online")]
+            )
+          ])
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group" }, [

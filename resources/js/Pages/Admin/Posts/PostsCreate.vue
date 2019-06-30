@@ -12,6 +12,12 @@
                 </select>
             </div>
             <div class="form-group">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="online" checked="" v-model="form.online">
+                    <label class="custom-control-label" for="online">Online</label>
+                </div>
+            </div>
+            <div class="form-group">
                 <div class="form-group">
                     <label for="title">Title</label>
                     <input type="text" class="form-control" id="title" v-model="form.title">
@@ -45,7 +51,8 @@
                     cover: "",
                     category_id: "",
                     title: "",
-                    content: ""
+                    content: "",
+                    online: false
                 },
                 endpoint: "/api/posts"
             }
@@ -67,6 +74,7 @@
                 formData.append("title", this.form.title);
                 formData.append("content", this.form.content);
                 formData.append("category_id", this.form.category_id);
+                formData.append("online", this.form.online);
 
                 this.store(formData, config);
             },
