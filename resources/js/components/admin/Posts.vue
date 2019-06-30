@@ -64,5 +64,4 @@
     .badge:empty {
         display: inline-block;
     }
-
 </style>

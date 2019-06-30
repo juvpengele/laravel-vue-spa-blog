@@ -30,6 +30,8 @@
             }
         },
         mounted() {
+            document.title = "Edit category | SPA Blog";
+
             this.endpoint = this.endpoint + `/${this.$route.params.category}`;
             this.loadCategory(this.endpoint)
         },

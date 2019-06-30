@@ -12,10 +12,12 @@
     import TagInput from "../../../Utilities/InputTag";
     import Errors from "../../../Utilities/Errors";
     import AddToken from "../../../mixins/AddToken";
+    import AuthMiddleware from "../../../mixins/AuthMiddleware";
+    import authenticated from "../../../mixins/authenticated";
     export default {
         name: "CategoriesCreate",
         components: { TagInput },
-        mixins: [AddToken],
+        mixins: [AddToken, AuthMiddleware, authenticated],
         data() {
             return {
                 categories: "",
@@ -30,10 +32,13 @@
             create() {
                 axios.post(this.endpoint, { names: this.categories })
                     .then(({ data : categories}) => {
-                        return this.$store.dispatch("removeCategory", categories.data)
+                        return this.$store.dispatch("storeCategories", categories.data)
                     })
                     .then(() => {
-                        this.$store.dispatch("alert", { message:  "Categories deleted successfully"});
+                        this.$store.dispatch("alert", { message:  "Categories stored successfully"});
+                        this.$router.push({
+                            "name" : "admin.categories.index"
+                        })
                     }).
                     catch(error => {
                         this.errors.record(error.response.data.errors)

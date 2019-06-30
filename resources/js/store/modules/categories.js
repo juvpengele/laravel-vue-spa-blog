@@ -45,7 +45,7 @@ const categories = {
         },
         removeCategory(store, payload) {
             return new Promise((resolve, reject) => {
-                store.commit("DELETE_CATEGORY", payload),
+                store.commit("DELETE_CATEGORY", payload);
                 resolve();
             })
         }
