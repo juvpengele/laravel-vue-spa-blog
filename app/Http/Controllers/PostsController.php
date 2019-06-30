@@ -49,7 +49,7 @@ class PostsController extends Controller
      */
     public function all()
     {
-        return new PostCollection(Post::all());
+        return new PostCollection(Post::latest()->get());
     }
 
 
@@ -73,7 +73,7 @@ class PostsController extends Controller
 
         $file->storeAs("public/covers", $filename);
 
-        return asset("storage/public/covers". $filename);
+        return asset("storage/covers/". $filename);
     }
 
     /**

@@ -29,7 +29,7 @@
 </script>
 
 <style scoped lang="scss">
-
+    @import url("https://maxcdn.icons8.com/fonts/line-awesome/1.1/css/line-awesome-font-awesome.min.css");
     
     body {
         font-size: .875rem;

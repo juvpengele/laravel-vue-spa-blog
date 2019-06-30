@@ -73,6 +73,11 @@
             store(data, config) {
                 axios.post(this.endpoint, data, config)
                     .then((response) => {
+                        return this.$store.dispatch("addCategoryPostCount", {
+                            category_id: this.form.category_id
+                        });
+                    })
+                    .then(() => {
                         this.$store.dispatch("alert", {
                             message: "Your post has been saved successfully"
                         });

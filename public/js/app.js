@@ -2200,6 +2200,10 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.post(this.endpoint, data, config).then(function (response) {
+        return _this.$store.dispatch("addCategoryPostCount", {
+          category_id: _this.form.category_id
+        });
+      }).then(function () {
         _this.$store.dispatch("alert", {
           message: "Your post has been saved successfully"
         });
@@ -22021,7 +22025,7 @@ exports.push([module.i, "/*@import \"../../../sass/login\";*/\n#app {\n  width: 
 
 exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
 // imports
-
+exports.push([module.i, "@import url(https://maxcdn.icons8.com/fonts/line-awesome/1.1/css/line-awesome-font-awesome.min.css);", ""]);
 
 // module
 exports.push([module.i, "body[data-v-369f35cc] {\n  font-size: 0.875rem;\n}\n\n/*\n * Sidebar\n */\n.sidebar[data-v-369f35cc] {\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  z-index: 100;\n  /* Behind the navbar */\n  padding: 48px 0 0;\n  /* Height of navbar */\n  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);\n}\n.sidebar-sticky[data-v-369f35cc] {\n  position: relative;\n  top: 0;\n  height: calc(100vh - 48px);\n  padding-top: 0.5rem;\n  overflow-x: hidden;\n  overflow-y: auto;\n  /* Scrollable contents if viewport is shorter than content. */\n}\n@supports ((position: -webkit-sticky) or (position: sticky)) {\n.sidebar-sticky[data-v-369f35cc] {\n    position: -webkit-sticky;\n    position: sticky;\n}\n}\n.sidebar .nav-link[data-v-369f35cc] {\n  font-weight: 500;\n  color: #333;\n}\n.sidebar .nav-link .feather[data-v-369f35cc] {\n  margin-right: 4px;\n  color: #999;\n}\n.sidebar .nav-link.active[data-v-369f35cc] {\n  color: #007bff;\n}\n.sidebar .nav-link:hover .feather[data-v-369f35cc],\n.sidebar .nav-link.active .feather[data-v-369f35cc] {\n  color: inherit;\n}\n.sidebar-heading[data-v-369f35cc] {\n  font-size: 0.75rem;\n  text-transform: uppercase;\n}\n\n/*\n * Content\n */\n[role=main][data-v-369f35cc] {\n  padding-top: 133px;\n  /* Space for fixed navbar */\n}\n@media (min-width: 768px) {\n[role=main][data-v-369f35cc] {\n    padding-top: 48px;\n    /* Space for fixed navbar */\n}\n}\n/*\n * Navbar\n */\n.navbar-brand[data-v-369f35cc] {\n  padding-top: 0.75rem;\n  padding-bottom: 0.75rem;\n  font-size: 1rem;\n  background-color: rgba(0, 0, 0, 0.25);\n  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.25);\n}\n.navbar .form-control[data-v-369f35cc] {\n  padding: 0.75rem 1rem;\n  border-width: 0;\n  border-radius: 0;\n}\n.form-control-dark[data-v-369f35cc] {\n  color: #fff;\n  background-color: rgba(255, 255, 255, 0.1);\n  border-color: rgba(255, 255, 255, 0.1);\n}\n.form-control-dark[data-v-369f35cc]:focus {\n  border-color: transparent;\n  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);\n}", ""]);
@@ -80819,12 +80823,20 @@ var categories = {
       state.categories = state.categories.filter(function (category, index) {
         return category.id !== payload.id;
       });
+    },
+    ADD_POSTS_COUNT: function ADD_POSTS_COUNT(state, _ref2) {
+      var category_id = _ref2.category_id;
+      state.categories.forEach(function (category) {
+        if (category.id === category_id) {
+          category.posts_count++;
+        }
+      });
     }
   },
   actions: {
     fetchCategories: function fetchCategories(store) {
-      axios.get("/api/categories").then(function (_ref2) {
-        var categories = _ref2.data;
+      axios.get("/api/categories").then(function (_ref3) {
+        var categories = _ref3.data;
         store.commit("FETCH_CATEGORIES", categories.data);
       })["catch"](function (error) {
         return console.log(error);
@@ -80845,6 +80857,12 @@ var categories = {
     removeCategory: function removeCategory(store, payload) {
       return new Promise(function (resolve, reject) {
         store.commit("DELETE_CATEGORY", payload);
+        resolve();
+      });
+    },
+    addCategoryPostCount: function addCategoryPostCount(store, payload) {
+      return new Promise(function (resolve, reject) {
+        store.commit("ADD_POSTS_COUNT", payload);
         resolve();
       });
     }
