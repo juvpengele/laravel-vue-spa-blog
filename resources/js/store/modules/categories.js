@@ -28,6 +28,13 @@ const categories = {
                     category.posts_count++;
                 }
             })
+        },
+        REMOVE_POSTS_COUNT(state, { id }) {
+            state.categories.forEach(category => {
+                if(category.id === id) {
+                    category.posts_count--;
+                }
+            })
         }
     },
     actions : {
@@ -59,6 +66,12 @@ const categories = {
         addCategoryPostCount(store, payload) {
             return new Promise((resolve, reject) => {
                 store.commit("ADD_POSTS_COUNT", payload);
+                resolve();
+            })
+        },
+        removeCategoryPostsCount(store, payload) {
+            return new Promise((resolve, reject) => {
+                store.commit("REMOVE_POSTS_COUNT", payload);
                 resolve();
             })
         }

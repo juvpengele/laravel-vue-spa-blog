@@ -4,6 +4,7 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col" class="text-center">Name</th>
+            <th scope="col" class="text-center">Posts</th>
             <th scope="col" class="text-center">Actions</th>
         </tr>
         </thead>
@@ -11,6 +12,9 @@
         <tr v-for="(category, index) in categories">
             <th scope="row">{{ index + 1}}</th>
             <td class="text-center">{{ category.name }}</td>
+            <td class="text-center">
+                <span class="badge badge-pill badge-info py-1 px-2">{{ category.posts_count }} {{ pluralize("post", category.posts_count)}}</span>
+            </td>
             <td class="text-center">
                 <router-link href="#" class="btn btn-outline-info rounded-circle round"
                      :to="{
