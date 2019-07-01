@@ -2280,6 +2280,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_admin_Posts__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../components/admin/Posts */ "./resources/js/components/admin/Posts.vue");
+/* harmony import */ var _mixins_AuthMiddleware__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../mixins/AuthMiddleware */ "./resources/js/mixins/AuthMiddleware.js");
+/* harmony import */ var _mixins_AddToken__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../mixins/AddToken */ "./resources/js/mixins/AddToken.js");
 //
 //
 //
@@ -2292,10 +2294,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     Posts: _components_admin_Posts__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
+  mixins: [_mixins_AuthMiddleware__WEBPACK_IMPORTED_MODULE_1__["default"], _mixins_AddToken__WEBPACK_IMPORTED_MODULE_2__["default"]],
   data: function data() {
     return {
       posts: [],
@@ -2316,6 +2321,20 @@ __webpack_require__.r(__webpack_exports__);
         _this.$store.dispatch("alert", {
           message: "Error occured during fetching data",
           type: "danger"
+        });
+      });
+    },
+    removePost: function removePost(_ref2) {
+      var _this2 = this;
+
+      var id = _ref2.id,
+          category = _ref2.category;
+      this.posts = this.posts.filter(function (post) {
+        return post.id !== id;
+      });
+      this.$store.dispatch("removeCategoryPostsCount", category).then(function () {
+        return _this2.$store.dispatch("alert", {
+          message: "The post has been deleted successfully"
         });
       });
     }
@@ -3101,6 +3120,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Categories",
   props: ["categories"],
@@ -3587,9 +3610,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Posts",
-  props: ["posts"]
+  props: ["posts"],
+  methods: {
+    deletePosts: function deletePosts(post) {
+      var _this = this;
+
+      var endpoint = "/api/posts/".concat(post.slug);
+
+      if (!confirm("Are you sure to delete this post ?")) {
+        return false;
+      }
+
+      axios["delete"](endpoint).then(function () {
+        return _this.$emit("deleted", post);
+      })["catch"](function (error) {
+        return _this.$store.dispatch("alert", {
+          message: "An error occured with the request",
+          type: "danger"
+        });
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -60219,7 +60266,10 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c("posts", { attrs: { posts: _vm.posts } })
+      _c("posts", {
+        attrs: { posts: _vm.posts },
+        on: { deleted: _vm.removePost }
+      })
     ],
     1
   )
@@ -61308,6 +61358,20 @@ var render = function() {
             _vm._v(_vm._s(category.name))
           ]),
           _vm._v(" "),
+          _c("td", { staticClass: "text-center" }, [
+            _c(
+              "span",
+              { staticClass: "badge badge-pill badge-info py-1 px-2" },
+              [
+                _vm._v(
+                  _vm._s(category.posts_count) +
+                    " " +
+                    _vm._s(_vm.pluralize("post", category.posts_count))
+                )
+              ]
+            )
+          ]),
+          _vm._v(" "),
           _c(
             "td",
             { staticClass: "text-center" },
@@ -61363,6 +61427,10 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { staticClass: "text-center", attrs: { scope: "col" } }, [
           _vm._v("Name")
+        ]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center", attrs: { scope: "col" } }, [
+          _vm._v("Posts")
         ]),
         _vm._v(" "),
         _c("th", { staticClass: "text-center", attrs: { scope: "col" } }, [
@@ -61934,6 +62002,20 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("td", { staticClass: "text-center" }, [
+            _c(
+              "span",
+              { staticClass: "badge badge-pill badge-info py-1 px-2" },
+              [
+                _vm._v(
+                  _vm._s(post.visits_count) +
+                    " " +
+                    _vm._s(_vm.pluralize("visit", post.visits_count))
+                )
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c("td", { staticClass: "text-center" }, [
             _c("span", {
               staticClass: "badge p-2",
               class: post.online ? "badge-success" : "badge-danger",
@@ -61962,7 +62044,20 @@ var render = function() {
                 [_c("i", { staticClass: "fa fa-pencil" })]
               ),
               _vm._v(" "),
-              _vm._m(1, true)
+              _c(
+                "a",
+                {
+                  staticClass: "btn btn-outline-danger rounded-circle round",
+                  attrs: { href: "#" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.deletePosts(post)
+                    }
+                  }
+                },
+                [_c("i", { staticClass: "fa fa-trash-o" })]
+              )
             ],
             1
           )
@@ -61994,6 +62089,10 @@ var staticRenderFns = [
         ]),
         _vm._v(" "),
         _c("th", { staticClass: "text-center", attrs: { scope: "col" } }, [
+          _vm._v("Views")
+        ]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center", attrs: { scope: "col" } }, [
           _vm._v("Online ?")
         ]),
         _vm._v(" "),
@@ -62002,19 +62101,6 @@ var staticRenderFns = [
         ])
       ])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "a",
-      {
-        staticClass: "btn btn-outline-danger rounded-circle round",
-        attrs: { href: "#" }
-      },
-      [_c("i", { staticClass: "fa fa-trash-o" })]
-    )
   }
 ]
 render._withStripped = true
@@ -79851,7 +79937,12 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('App', __webpack_require__(/*! ./App */ "./resources/js/App.vue")["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('App', __webpack_require__(/*! ./App */ "./resources/js/App.vue")["default"]); //Helpers
+
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.prototype.pluralize = function (word, count) {
+  return parseInt(count) > 1 ? word + "s" : word;
+};
+
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app',
   router: new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
@@ -80947,12 +81038,20 @@ var categories = {
           category.posts_count++;
         }
       });
+    },
+    REMOVE_POSTS_COUNT: function REMOVE_POSTS_COUNT(state, _ref3) {
+      var id = _ref3.id;
+      state.categories.forEach(function (category) {
+        if (category.id === id) {
+          category.posts_count--;
+        }
+      });
     }
   },
   actions: {
     fetchCategories: function fetchCategories(store) {
-      axios.get("/api/categories").then(function (_ref3) {
-        var categories = _ref3.data;
+      axios.get("/api/categories").then(function (_ref4) {
+        var categories = _ref4.data;
         store.commit("FETCH_CATEGORIES", categories.data);
       })["catch"](function (error) {
         return console.log(error);
@@ -80979,6 +81078,12 @@ var categories = {
     addCategoryPostCount: function addCategoryPostCount(store, payload) {
       return new Promise(function (resolve, reject) {
         store.commit("ADD_POSTS_COUNT", payload);
+        resolve();
+      });
+    },
+    removeCategoryPostsCount: function removeCategoryPostsCount(store, payload) {
+      return new Promise(function (resolve, reject) {
+        store.commit("REMOVE_POSTS_COUNT", payload);
         resolve();
       });
     }

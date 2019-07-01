@@ -6,7 +6,13 @@ require('./bootstrap');
 
 Vue.use(VueRouter);
 
+
 Vue.component('App', require('./App').default);
+
+//Helpers
+Vue.prototype.pluralize = (word, count) => {
+    return parseInt(count) > 1 ? word + "s" : word;
+};
 
 const app = new Vue({
     el: '#app',

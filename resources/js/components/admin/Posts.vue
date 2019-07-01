@@ -6,6 +6,7 @@
             <th scope="col" class="text-center">Title</th>
             <th scope="col" class="text-center">Description</th>
             <th scope="col" class="text-center">Category</th>
+            <th scope="col" class="text-center">Views</th>
             <th scope="col" class="text-center">Online ?</th>
             <th scope="col" class="text-center">Actions</th>
         </tr>
@@ -16,6 +17,9 @@
             <td >{{ post.title }}</td>
             <td >{{ post.description }}</td>
             <td class="text-center">{{ post.category.name }}</td>
+            <td class="text-center">
+                <span class="badge badge-pill badge-info py-1 px-2">{{ post.visits_count }} {{ pluralize("visit", post.visits_count)}}</span>
+            </td>
             <td class="text-center">
                 <span class="badge p-2" :class="post.online ? 'badge-success': 'badge-danger'" style="border-radius: 50%"></span>
             </td>
@@ -30,7 +34,7 @@
                 >
                     <i class="fa fa-pencil"></i>
                 </router-link>
-                <a href="#" class="btn btn-outline-danger rounded-circle round">
+                <a href="#" class="btn btn-outline-danger rounded-circle round" @click.prevent="deletePosts(post)">
                     <i class="fa fa-trash-o"></i>
                 </a>
             </td>
@@ -43,7 +47,20 @@
 <script>
     export default {
         name: "Posts",
-        props: ["posts"]
+        props: ["posts"],
+        methods: {
+            deletePosts(post) {
+                const endpoint = `/api/posts/${post.slug}`;
+
+                if(! confirm("Are you sure to delete this post ?")) {
+                    return false;
+                }
+
+                axios.delete(endpoint)
+                    .then(() => this.$emit("deleted", post))
+                    .catch(error => this.$store.dispatch("alert", {message: "An error occured with the request", type: "danger"}))
+            }
+        }
     }
 </script>
 

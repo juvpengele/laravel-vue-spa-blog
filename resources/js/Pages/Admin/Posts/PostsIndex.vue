@@ -5,14 +5,17 @@
                 Add a new post <i class="fa fa-plus-circle"></i>
             </router-link>
         </div>
-        <posts :posts="posts"></posts>
+        <posts :posts="posts" @deleted="removePost"></posts>
     </div>
 </template>
 
 <script>
     import Posts from "../../../components/admin/Posts";
+    import AuthMiddleware from "../../../mixins/AuthMiddleware";
+    import AddToken from "../../../mixins/AddToken";
     export default {
         components: {Posts},
+        mixins: [AuthMiddleware, AddToken],
         data() {
             return {
                 posts: [],
@@ -34,6 +37,13 @@
                             type: "danger"
                         })
                     })
+            },
+            removePost({id, category}) {
+
+                this.posts = this.posts.filter(post => post.id !== id);
+
+                this.$store.dispatch("removeCategoryPostsCount", category)
+                            .then(() => this.$store.dispatch("alert", {message: "The post has been deleted successfully"}))
             }
         }
     }
