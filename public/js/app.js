@@ -2327,10 +2327,10 @@ __webpack_require__.r(__webpack_exports__);
     removePost: function removePost(_ref2) {
       var _this2 = this;
 
-      var id = _ref2.id,
+      var post_id = _ref2.id,
           category = _ref2.category;
       this.posts = this.posts.filter(function (post) {
-        return post.id !== id;
+        return post.id !== post_id;
       });
       this.$store.dispatch("removeCategoryPostsCount", category).then(function () {
         return _this2.$store.dispatch("alert", {
@@ -79911,7 +79911,8 @@ function () {
   return Storage;
 }();
 
-/* harmony default export */ __webpack_exports__["default"] = (new Storage());
+var storage = new Storage();
+/* harmony default export */ __webpack_exports__["default"] = (storage);
 
 /***/ }),
 

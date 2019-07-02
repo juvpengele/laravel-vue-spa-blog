@@ -38,9 +38,9 @@
                         })
                     })
             },
-            removePost({id, category}) {
+            removePost({id : post_id, category}) {
 
-                this.posts = this.posts.filter(post => post.id !== id);
+                this.posts = this.posts.filter(post => post.id !== post_id);
 
                 this.$store.dispatch("removeCategoryPostsCount", category)
                             .then(() => this.$store.dispatch("alert", {message: "The post has been deleted successfully"}))

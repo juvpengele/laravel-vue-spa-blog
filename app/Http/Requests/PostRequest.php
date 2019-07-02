@@ -24,22 +24,27 @@ class PostRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             "title" => "required|max:200",
             "content" => "required",
             "category_id" => "required|exists:categories,id",
-            "cover" => "required|image"
+            "cover" => ["nullable", "image"]
         ];
+
+        if($this->method() == "POST") {
+            $rules["cover"][0] = ["required"];
+        }
+
+        return $rules;
     }
 
     public function data()
     {
         return $this->merge([
             "slug" => Str::slug($this->get("title")),
-            "visits" => 0,
             "user_id" => auth()->id(),
             "online" => $this->get("online") === "true"
-        ])->only(["title", "slug", "content", "visits", "user_id", "category_id", "online"]);
+        ])->only(["title", "slug", "content", "user_id", "category_id", "online"]);
     }
 
 

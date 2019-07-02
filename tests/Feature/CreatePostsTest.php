@@ -119,14 +119,58 @@ class CreatePostsTest extends TestCase
 
     }
 
+    /** @test */
+    public function a_blog_post_can_be_updated()
+    {
+        $this->withoutExceptionHandling();
+
+        $post = create(Post::class, ["title" => "Old title", "online" => true]);
+
+        $data = [
+            "title" => "Lorem ipsum",
+            "content" => $this->faker->paragraph,
+            "category_id" => create(Category::class)->id,
+            "online" => false,
+        ];
+
+        $this->putJson(route("api.posts.update", $post), $data);
+
+        $post = $post->fresh();
+
+        $this->assertEquals($data["title"], $post->title);
+        $this->assertEquals($data["online"], !! $post->online);
+    }
+
+
+    /** @test */
+    public function post_cove_images_can_be_updated()
+    {
+        $post = create(Post::class, ["title" => "Old title", "online" => true]);
+
+        $data = [
+            "title" => "Lorem ipsum",
+            "content" => $this->faker->paragraph,
+            "category_id" => create(Category::class)->id,
+            "online" => false,
+            "cover" => UploadedFile::fake()->image('avatar.jpg')
+        ];
+
+        $this->putJson(route("api.posts.update", $post), $data);
+
+        $this->assertTrue($post->cover !== $post->fresh()->cover);
+
+        $this->deleteStoreFile(Post::all()->pluck("cover")->toArray());
+    }
+
     private function deleteStoreFile(array $filenames) : void
     {
+
         if(is_array($filenames)) {
             foreach ($filenames as $filename) {
-                Storage::delete("public/covers", $filename);
+                Storage::delete("public/covers/{$filename}");
             }
         } else {
-            Storage::delete("public/covers", $filenames);
+            Storage::delete("public/covers/{$filenames}");
         }
     }
 

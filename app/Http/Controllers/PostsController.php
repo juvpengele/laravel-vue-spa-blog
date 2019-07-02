@@ -61,6 +61,7 @@ class PostsController extends Controller
     {
         $data = $request->data();
         $data["cover_path"] = $this->uploadCover($request->file("cover"));
+        $data["visits"] = 0;
 
         $post = Post::create($data);
 
@@ -93,15 +94,23 @@ class PostsController extends Controller
 
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param PostRequest $request
+     * @param Post $post
+     * @return PostResource
      */
-    public function update(Request $request, $id)
+    public function update(PostRequest $request, Post $post)
     {
-        //
+        $data = $request->data();
+
+        if($request->file("cover")) {
+            Storage::delete("public/covers/", $post->cover);
+
+            $data["cover_path"] = $this->uploadCover($request->file("cover"));
+        }
+
+        $post->update($data);
+
+        return new PostResource($post);
     }
 
     /**
@@ -113,7 +122,7 @@ class PostsController extends Controller
     {
         $post->delete();
 
-        Storage::delete("public/covers", $post->cover);
+        Storage::delete("public/covers/{$post->cover}");
 
         return response()->json([], 204);
     }
