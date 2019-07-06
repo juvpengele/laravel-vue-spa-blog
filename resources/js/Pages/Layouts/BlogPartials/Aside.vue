@@ -10,21 +10,16 @@
                 <span class="badge badge-primary badge-pill">{{ category.posts_count}}</span>
             </router-link>
         </div>
-        <div class="mt-4">
-            <h3 class="aside--title mb-4">Tags</h3>
-            <div class="row">
-                <a class="badge badge-pill badge-info col-md-2 m-2 py-2 text-center" href="#">Info</a>
-                <a class="badge badge-pill badge-info col-md-2 m-2 py-2 text-center" href="#">Info</a>
-                <a class="badge badge-pill badge-info col-md-2 m-2 py-2 text-center" href="#">Info</a>
-            </div>
-        </div>
+        <Tag></Tag>
     </div>
     <!-- End aside -->
 </template>
 
 <script>
+    import Tag from "../../../components/Tag";
     export default {
         name: "Aside",
+        components: {Tag},
         computed : {
             categories() {
                 return this.$store.getters.categories;

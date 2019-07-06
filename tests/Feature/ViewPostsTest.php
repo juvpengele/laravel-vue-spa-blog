@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Tag;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -101,6 +102,27 @@ class ViewPostsTest extends TestCase
 
     }
 
+
+    /** @test */
+    public function we_can_filter_posts_with_tags()
+    {
+        $taggedPosts = create(Post::class, [], 3);
+        create(Post::class, [], 2);
+
+        $tagIds = Tag::add(["php"]);
+
+        foreach ($taggedPosts as $post) {
+            $post->tags()->attach($tagIds);
+        }
+
+        $tag = Tag::first();
+
+        $response = $this->getJson(route("api.tags.posts",  $tag))->json();
+
+        $this->assertCount(5, Post::all());
+        $this->assertCount(3, $response["data"]);
+
+    }
 
 
 }

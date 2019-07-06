@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PostCollection;
 use App\Http\Resources\TagResource;
 use App\Models\Tag;
 use Illuminate\Http\Request;
@@ -72,5 +73,17 @@ class TagsController extends Controller
         $tag->delete();
 
         return response()->json([], 204);
+    }
+
+
+    /**
+     * @param Tag $tag
+     * @return PostCollection
+     */
+    public function getPosts(Tag $tag)
+    {
+        $posts = $tag->posts()->online()->get();
+
+        return new PostCollection($posts);
     }
 }
