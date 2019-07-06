@@ -6,6 +6,8 @@ import CategoriesEdit from "../Pages/Admin/Categories/CategoriesEdit";
 import PostsIndex from "../Pages/Admin/Posts/PostsIndex";
 import PostsCreate from "../Pages/Admin/Posts/PostsCreate";
 import PostsEdit from "../Pages/Admin/Posts/PostsEdit";
+import TagsIndex from "../Pages/Admin/Tags/TagsIndex";
+import TagsEdit from "../Pages/Admin/Tags/TagsEdit";
 
 
 const routes = [
@@ -61,6 +63,22 @@ const routes = [
         path: "/admin/categories/:category/edit",
         component: CategoriesEdit,
         name: "admin.categories.edit",
+        meta: {
+            layout: "admin-layout"
+        }
+    },
+    {
+        path: "/admin/tags",
+        component: TagsIndex,
+        name: "admin.tags.index",
+        meta: {
+            layout: "admin-layout"
+        }
+    },
+    {
+        path: "/admin/tags/:tag/edit",
+        component: TagsEdit,
+        name: "admin.tags.edit",
         meta: {
             layout: "admin-layout"
         }

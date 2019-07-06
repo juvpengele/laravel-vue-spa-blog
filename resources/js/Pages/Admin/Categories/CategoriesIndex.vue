@@ -17,7 +17,7 @@
     export default {
         name: "CategoriesIndex",
         components: {Categories},
-        mixins: [authenticated, AuthMiddleware],
+        mixins: [ authenticated, AuthMiddleware ],
         data() {
             return {
                 endpoint: "/api/categories"
