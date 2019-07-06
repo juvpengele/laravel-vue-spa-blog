@@ -82,7 +82,7 @@ class TagsController extends Controller
      */
     public function getPosts(Tag $tag)
     {
-        $posts = $tag->posts()->online()->get();
+        $posts = $tag->posts()->online()->paginate(10);
 
         return new PostCollection($posts);
     }

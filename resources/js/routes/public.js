@@ -3,6 +3,7 @@ import PostsIndex from "../Pages/Blog/PostsIndex";
 import PostShow from "../Pages/Blog/PostShow";
 import NotFound from "../Pages/NotFound";
 import CategoryIndex from "../Pages/Blog/CategoryIndex";
+import TagIndex from "../Pages/Blog/TagIndex";
 
 
 
@@ -16,6 +17,11 @@ const routes = [
         path: "/categories/:category",
         component: CategoryIndex,
         name: "categories.index"
+    },
+    {
+        path: "/tags/:tag",
+        component: TagIndex,
+        name: "tags.index"
     },
     {
         path: "/:category/:slug",

@@ -24,7 +24,8 @@
             return {
                 posts: [],
                 endpoint: "/api/categories",
-                pagination: {}
+                pagination: {},
+
             }
         },
         created() {
