@@ -2195,7 +2195,6 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     updateCover: function updateCover(cover) {
       if (this.errors.has('cover')) {
-        console.log(this.errors.get('cover'));
         this.errors.clear('cover');
       }
 
@@ -2260,12 +2259,157 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _components_CoverUploader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../components/CoverUploader */ "./resources/js/components/CoverUploader.vue");
+/* harmony import */ var vue_simplemde_src_markdown_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-simplemde/src/markdown-editor */ "./node_modules/vue-simplemde/src/markdown-editor.vue");
+/* harmony import */ var _mixins_AddToken__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../mixins/AddToken */ "./resources/js/mixins/AddToken.js");
+/* harmony import */ var _mixins_AuthMiddleware__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../mixins/AuthMiddleware */ "./resources/js/mixins/AuthMiddleware.js");
+/* harmony import */ var _mixins_authenticated__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../mixins/authenticated */ "./resources/js/mixins/authenticated.js");
+/* harmony import */ var _Utilities_Errors__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../Utilities/Errors */ "./resources/js/Utilities/Errors.js");
 //
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "PostsEdit"
+  name: "PostEdit",
+  components: {
+    CoverUploader: _components_CoverUploader__WEBPACK_IMPORTED_MODULE_0__["default"],
+    MarkdownEditor: vue_simplemde_src_markdown_editor__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  mixins: [_mixins_AuthMiddleware__WEBPACK_IMPORTED_MODULE_3__["default"], _mixins_authenticated__WEBPACK_IMPORTED_MODULE_4__["default"], _mixins_AddToken__WEBPACK_IMPORTED_MODULE_2__["default"]],
+  data: function data() {
+    return {
+      endpoint: "/api/posts",
+      post: {},
+      errors: new _Utilities_Errors__WEBPACK_IMPORTED_MODULE_5__["default"](),
+      form: {
+        cover: "",
+        category_id: "",
+        title: "",
+        content: "",
+        online: ""
+      }
+    };
+  },
+  mounted: function mounted() {
+    this.endpoint = "".concat(this.endpoint, "/").concat(this.$route.params.post);
+    this.loadPost(this.endpoint);
+  },
+  methods: {
+    loadPost: function loadPost(endpoint) {
+      var _this = this;
+
+      axios.get(endpoint).then(function (_ref) {
+        var post = _ref.data;
+        _this.post = post.data;
+
+        _this.setForm(_this.post);
+      })["catch"](function (error) {
+        return _this.$store.dispatch("alert", {
+          message: "An error occured",
+          type: "danger"
+        });
+      });
+    },
+    updateCover: function updateCover(cover) {
+      this.form.cover = cover;
+    },
+    setForm: function setForm(post) {
+      this.form = {
+        cover: null,
+        category_id: post.category.id,
+        title: post.title,
+        content: post.content,
+        online: post.online
+      };
+    },
+    updatePost: function updatePost() {
+      var config = {
+        headers: {
+          "content-type": "multipart/form-data"
+        }
+      };
+      var formData = new FormData();
+      formData.append("cover", this.form.cover);
+      formData.append("title", this.form.title);
+      formData.append("content", this.form.content);
+      formData.append("category_id", this.form.category_id);
+      formData.append("online", this.form.online);
+      formData.append('_method', 'PUT');
+      this.store(formData, config);
+    },
+    store: function store(data, config) {
+      var _this2 = this;
+
+      axios.post(this.endpoint, data, config).then(function (response) {
+        // Change the post count
+        return _this2.$store.dispatch("alert", {
+          message: "Post edited successfully"
+        });
+      }).then(function () {
+        return _this2.$router.push({
+          name: "admin.posts.index"
+        });
+      })["catch"](function (error) {
+        if (error.response.data.errors) {
+          _this2.errors.record(error.response.data.errors);
+        } else {
+          _this2.$store.dispatch("alert", {
+            message: "An error occured during the request",
+            type: "danger"
+          });
+        }
+      });
+    }
+  },
+  computed: {
+    categories: function categories() {
+      return this.$store.getters.categories;
+    }
+  }
 });
 
 /***/ }),
@@ -2282,6 +2426,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_admin_Posts__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../components/admin/Posts */ "./resources/js/components/admin/Posts.vue");
 /* harmony import */ var _mixins_AuthMiddleware__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../mixins/AuthMiddleware */ "./resources/js/mixins/AuthMiddleware.js");
 /* harmony import */ var _mixins_AddToken__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../mixins/AddToken */ "./resources/js/mixins/AddToken.js");
+/* harmony import */ var _mixins_authenticated__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../mixins/authenticated */ "./resources/js/mixins/authenticated.js");
 //
 //
 //
@@ -2293,6 +2438,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 
@@ -2300,7 +2446,7 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     Posts: _components_admin_Posts__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  mixins: [_mixins_AuthMiddleware__WEBPACK_IMPORTED_MODULE_1__["default"], _mixins_AddToken__WEBPACK_IMPORTED_MODULE_2__["default"]],
+  mixins: [_mixins_AuthMiddleware__WEBPACK_IMPORTED_MODULE_1__["default"], _mixins_AddToken__WEBPACK_IMPORTED_MODULE_2__["default"], _mixins_authenticated__WEBPACK_IMPORTED_MODULE_3__["default"]],
   data: function data() {
     return {
       posts: [],
@@ -3346,6 +3492,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CoverUploader",
+  props: {
+    cover: {
+      type: String,
+      required: false
+    }
+  },
   data: function data() {
     return {
       image: "data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22318%22%20height%3D%22180%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20318%20180%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_158bd1d28ef%20text%20%7B%20fill%3Argba(255%2C255%2C255%2C.75)%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A16pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_158bd1d28ef%22%3E%3Crect%20width%3D%22318%22%20height%3D%22180%22%20fill%3D%22%23777%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22129.359375%22%20y%3D%2297.35%22%3ECover%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
@@ -3371,9 +3523,11 @@ __webpack_require__.r(__webpack_exports__);
       this.$emit("loaded", this.$refs.cover.files[0]);
     }
   },
-  computed: {
-    cover: function cover() {
-      return this.image;
+  watch: {
+    "cover": function cover(newValue, oldValue) {
+      if (newValue !== "") {
+        this.image = newValue;
+      }
     }
   }
 });
@@ -60219,9 +60373,240 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div")
+  return _c("div", { staticClass: "container-fluid" }, [
+    _c(
+      "form",
+      {
+        attrs: { action: "" },
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.updatePost($event)
+          }
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "card mb-3" },
+          [
+            _c("cover-uploader", {
+              attrs: { cover: _vm.post.cover_path },
+              on: { loaded: _vm.updateCover }
+            }),
+            _vm._v(" "),
+            _vm.errors.has("cover")
+              ? _c("small", { staticClass: "post-text text-danger" }, [
+                  _vm._v(_vm._s(_vm.errors.get("cover")))
+                ])
+              : _vm._e()
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", { attrs: { for: "category" } }, [_vm._v("Category")]),
+          _vm._v(" "),
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.form.category_id,
+                  expression: "form.category_id"
+                }
+              ],
+              staticClass: "custom-select",
+              attrs: { id: "category" },
+              on: {
+                change: [
+                  function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.form,
+                      "category_id",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  },
+                  function($event) {
+                    return _vm.errors.clear("category_id")
+                  }
+                ]
+              }
+            },
+            [
+              _c("option", { attrs: { selected: "", disabled: "" } }),
+              _vm._v(" "),
+              _vm._l(_vm.categories, function(category) {
+                return _c(
+                  "option",
+                  {
+                    domProps: {
+                      value: category.id,
+                      selected: category.id === _vm.form.category_id
+                    }
+                  },
+                  [_vm._v(_vm._s(category.name))]
+                )
+              })
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _vm.errors.has("category_id")
+            ? _c("small", { staticClass: "post-text text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.get("category_id")))
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("div", { staticClass: "custom-control custom-switch" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.form.online,
+                  expression: "form.online"
+                }
+              ],
+              staticClass: "custom-control-input",
+              attrs: { type: "checkbox", id: "online", checked: "" },
+              domProps: {
+                checked: Array.isArray(_vm.form.online)
+                  ? _vm._i(_vm.form.online, null) > -1
+                  : _vm.form.online
+              },
+              on: {
+                change: function($event) {
+                  var $$a = _vm.form.online,
+                    $$el = $event.target,
+                    $$c = $$el.checked ? true : false
+                  if (Array.isArray($$a)) {
+                    var $$v = null,
+                      $$i = _vm._i($$a, $$v)
+                    if ($$el.checked) {
+                      $$i < 0 && _vm.$set(_vm.form, "online", $$a.concat([$$v]))
+                    } else {
+                      $$i > -1 &&
+                        _vm.$set(
+                          _vm.form,
+                          "online",
+                          $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                        )
+                    }
+                  } else {
+                    _vm.$set(_vm.form, "online", $$c)
+                  }
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c(
+              "label",
+              { staticClass: "custom-control-label", attrs: { for: "online" } },
+              [_vm._v("Online")]
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "title" } }, [_vm._v("Title")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.form.title,
+                  expression: "form.title"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text", id: "title" },
+              domProps: { value: _vm.form.title },
+              on: {
+                keydown: function($event) {
+                  return _vm.errors.clear("title")
+                },
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.form, "title", $event.target.value)
+                }
+              }
+            }),
+            _vm._v(" "),
+            _vm.errors.has("title")
+              ? _c("small", { staticClass: "post-text text-danger" }, [
+                  _vm._v(_vm._s(_vm.errors.get("title")))
+                ])
+              : _vm._e()
+          ])
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "form-group" },
+          [
+            _c("label", { attrs: { for: "content" } }, [_vm._v("Content")]),
+            _vm._v(" "),
+            _c("markdown-editor", {
+              attrs: { id: "content" },
+              on: {
+                keydown: function($event) {
+                  return _vm.errors.clear("content")
+                }
+              },
+              model: {
+                value: _vm.form.content,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "content", $$v)
+                },
+                expression: "form.content"
+              }
+            }),
+            _vm._v(" "),
+            _vm.errors.has("content")
+              ? _c("small", { staticClass: "post-text text-danger" }, [
+                  _vm._v(_vm._s(_vm.errors.get("content")))
+                ])
+              : _vm._e()
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _vm._m(0)
+      ]
+    )
+  ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-success btn-lg", attrs: { type: "submit" } },
+        [_vm._v("Edit "), _c("i", { staticClass: "fa fa-check" })]
+      )
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -81147,7 +81532,10 @@ var store = {
   },
   actions: {
     alert: function alert(store, payload) {
-      store.commit("SHOW_FLASH", payload);
+      return new Promise(function (resolve, reject) {
+        store.commit("SHOW_FLASH", payload);
+        resolve();
+      });
     }
   },
   getters: {

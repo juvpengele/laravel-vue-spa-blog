@@ -83,7 +83,7 @@ class PostsController extends Controller
      * @return PostResource
      *
      */
-    public function show(Category $category, Post $post)
+    public function show(Category $category, Post $post) : PostResource
     {
         $post->increment("visits");
 
@@ -98,12 +98,12 @@ class PostsController extends Controller
      * @param Post $post
      * @return PostResource
      */
-    public function update(PostRequest $request, Post $post)
+    public function update(PostRequest $request, Post $post) : PostResource
     {
         $data = $request->data();
 
         if($request->file("cover")) {
-            Storage::delete("public/covers/", $post->cover);
+            Storage::delete("public/covers/" . $post->cover);
 
             $data["cover_path"] = $this->uploadCover($request->file("cover"));
         }

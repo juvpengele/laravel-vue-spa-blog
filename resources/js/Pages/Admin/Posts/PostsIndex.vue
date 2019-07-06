@@ -13,9 +13,10 @@
     import Posts from "../../../components/admin/Posts";
     import AuthMiddleware from "../../../mixins/AuthMiddleware";
     import AddToken from "../../../mixins/AddToken";
+    import authenticated from "../../../mixins/authenticated";
     export default {
         components: {Posts},
-        mixins: [AuthMiddleware, AddToken],
+        mixins: [AuthMiddleware, AddToken, authenticated],
         data() {
             return {
                 posts: [],

@@ -24,15 +24,21 @@ class PostRequest extends FormRequest
      */
     public function rules()
     {
+        $this->reformatData();
+
         $rules = [
             "title" => "required|max:200",
             "content" => "required",
             "category_id" => "required|exists:categories,id",
-            "cover" => ["nullable", "image"]
+            "cover" => ["nullable"]
         ];
 
         if($this->method() == "POST") {
-            $rules["cover"][0] = ["required"];
+            $rules["cover"][0] = ["required", "image"];
+        }
+
+        if($this->method() === "PUT" && $this->cover !== null) {
+            $rules["cover"][] = "image";
         }
 
         return $rules;
@@ -45,6 +51,17 @@ class PostRequest extends FormRequest
             "user_id" => auth()->id(),
             "online" => $this->get("online") === "true"
         ])->only(["title", "slug", "content", "user_id", "category_id", "online"]);
+    }
+
+    /**
+     * Reformat data format send through ajax t
+     *
+     */
+    private function reformatData(): void
+    {
+        if($this->cover === "null") {
+            $this->merge([ "cover"=> null ]);
+        }
     }
 
 
