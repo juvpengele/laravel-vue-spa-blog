@@ -3003,7 +3003,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     '$route.params': function $routeParams(newParam, oldParam) {
-      var endpoint = this.getEndpoint(newParam.category);
+      var endpoint = this.getEndpoint(newParam.tag);
       this.loadPosts(endpoint);
     }
   }
@@ -63028,10 +63028,11 @@ var render = function() {
     _c(
       "div",
       { staticClass: "row" },
-      _vm._l(_vm.tags, function(tag) {
+      _vm._l(_vm.tags, function(tag, index) {
         return _c(
           "router-link",
           {
+            key: index,
             staticClass:
               "badge badge-pill badge-info col-md-2 m-2 py-2 text-center",
             attrs: {
