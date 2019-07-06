@@ -35,6 +35,12 @@ Route::apiResource("categories", "CategoriesController")->names([
 ]);
 Route::get("/categories/{category}/posts", "CategoriesController@getPosts")->name("api.categories.posts");
 
+Route::apiResource("tags", "TagsController")->names([
+    "index"     => "api.tags.index",
+    "show"      => "api.tags.show",
+    "update"    => "api.tags.update",
+    "destroy"   => "api.tags.destroy",
+])->except(["store"]);
 
 Route::get("{category}/{post}", "PostsController@show")->name("api.posts.show");
 Route::post("{category}/{post}/comments", "CommentsController@store")->name("api.comments.store");

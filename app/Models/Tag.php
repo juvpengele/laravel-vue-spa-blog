@@ -10,6 +10,11 @@ class Tag extends Model
 {
     public $fillable = ["name", "slug"];
 
+    public function getRouteKeyName()
+    {
+        return "slug";
+    }
+
     /**
      * Relationship between a tag with posts
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
