@@ -89,7 +89,9 @@ class PostsController extends Controller
      */
     public function show(Category $category, Post $post) : PostResource
     {
-        $post->increment("visits");
+        if(! auth()->user()) {
+            $post->increment("visits");
+        }
 
         $post->load(["category", "creator", "comments"]);
 
