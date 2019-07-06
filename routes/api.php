@@ -17,6 +17,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+/*
+    |--------------------------------------------------------------------------
+    | Posts routes
+    |--------------------------------------------------------------------------
+*/
 Route::get("/posts/all", "PostsController@all");
 Route::resource("posts", "PostsController")->names([
     "index" => "api.posts.index",
@@ -25,6 +30,16 @@ Route::resource("posts", "PostsController")->names([
     "update" => "api.posts.update",
     "destroy" => "api.posts.destroy",
 ]);
+
+Route::get("{category}/{post}", "PostsController@show")->name("api.posts.show");
+Route::post("{category}/{post}/comments", "CommentsController@store")->name("api.comments.store");
+
+/*
+    |--------------------------------------------------------------------------
+    | Categories routes
+    |--------------------------------------------------------------------------
+    |
+*/
 
 Route::apiResource("categories", "CategoriesController")->names([
     "index" => "api.categories.index",
@@ -36,6 +51,11 @@ Route::apiResource("categories", "CategoriesController")->names([
 Route::get("/categories/{category}/posts", "CategoriesController@getPosts")->name("api.categories.posts");
 
 
+/*
+    |--------------------------------------------------------------------------
+    | Tags routes
+    |--------------------------------------------------------------------------
+*/
 Route::apiResource("tags", "TagsController")->names([
     "index"     => "api.tags.index",
     "show"      => "api.tags.show",
@@ -43,9 +63,6 @@ Route::apiResource("tags", "TagsController")->names([
     "destroy"   => "api.tags.destroy",
 ])->except(["store"]);
 Route::get("/tags/{tag}/posts", "TagsController@getPosts")->name("api.tags.posts");
-
-Route::get("{category}/{post}", "PostsController@show")->name("api.posts.show");
-Route::post("{category}/{post}/comments", "CommentsController@store")->name("api.comments.store");
 
 
 
