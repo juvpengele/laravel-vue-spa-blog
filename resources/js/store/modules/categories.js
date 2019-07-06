@@ -22,9 +22,9 @@ const categories = {
                 return category.id !== payload.id
             });
         },
-        ADD_POSTS_COUNT(state, { category_id }) {
+        ADD_POSTS_COUNT(state, { id }) {
             state.categories.forEach(category => {
-                if(category.id === category_id) {
+                if(category.id === id) {
                     category.posts_count++;
                 }
             })
@@ -74,6 +74,10 @@ const categories = {
                 store.commit("REMOVE_POSTS_COUNT", payload);
                 resolve();
             })
+        },
+        changeCategoriesPostsCount(store, payload) {
+            store.commit("REMOVE_POSTS_COUNT", payload.old);
+            store.commit("ADD_POSTS_COUNT", payload.new)
         }
     },
     getters : {
