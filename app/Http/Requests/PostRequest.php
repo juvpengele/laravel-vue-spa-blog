@@ -30,7 +30,8 @@ class PostRequest extends FormRequest
             "title" => "required|max:200",
             "content" => "required",
             "category_id" => "required|exists:categories,id",
-            "cover" => ["nullable"]
+            "cover" => ["nullable"],
+            "tags"  => "required"
         ];
 
         if($this->method() == "POST") {

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Tag;
 use App\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -41,17 +42,45 @@ class CreatePostsTest extends TestCase
             "content" => $this->faker->paragraph,
             "category_id" => create(Category::class)->id,
             "online" => true,
-            "cover" => UploadedFile::fake()->image('avatar.jpg')
+            "cover" => UploadedFile::fake()->image('avatar.jpg'),
+            "tags" =>"php,java,javascript"
         ];
 
         $this->postJson(route("api.posts.store"), $data);
 
         $this->assertCount(1, Post::all());
 
+        $this->deleteStoreFile(Post::all()->pluck("cover")->toArray());
     }
 
     /** @test */
-    public function a_post_requires_a_title_and_a_content()
+    public function test_a_blog_can_be_created_and_linked_to_its_tags()
+    {
+        $this->withoutExceptionHandling();
+
+        Storage::fake('avatars');
+
+        $data = [
+            "title" => "Lorem ipsum",
+            "content" => $this->faker->paragraph,
+            "category_id" => create(Category::class)->id,
+            "online" => true,
+            "cover" => UploadedFile::fake()->image('avatar.jpg'),
+            "tags" =>"php,java,javascript"
+        ];
+
+        $this->postJson(route("api.posts.store"), $data);
+
+        $post = Post::first();
+
+        $this->assertEquals(3, $post->tags()->count());
+
+        $this->deleteStoreFile(Post::all()->pluck("cover")->toArray());
+    }
+
+
+    /** @test */
+    public function a_post_requires_a_title_and_a_content_and_tags()
     {
         Storage::fake('avatars');
 
@@ -60,12 +89,16 @@ class CreatePostsTest extends TestCase
             "content" => "",
             "category_id" => "",
             "online" => true,
-            "cover" => UploadedFile::fake()->image('avatar.jpg')
+            "cover" => UploadedFile::fake()->image('avatar.jpg'),
         ];
 
-        $this->postJson(route("api.posts.store"), $data);
+        $response = $this->postJson(route("api.posts.store"), $data)->json();
 
-        $this->assertCount(0, Post::all());
+        $this->assertContains("title", array_keys($response["errors"]));
+        $this->assertContains("content", array_keys($response["errors"]));
+        $this->assertContains("tags", array_keys($response["errors"]));
+
+        $this->deleteStoreFile(Post::all()->pluck("cover")->toArray());
     }
 
     /** @test */
@@ -108,7 +141,8 @@ class CreatePostsTest extends TestCase
             "content" => $this->faker->paragraph,
             "category_id" => create(Category::class)->id,
             "online" => false,
-            "cover" => UploadedFile::fake()->image('avatar.jpg')
+            "cover" => UploadedFile::fake()->image('avatar.jpg'),
+            "tags" => "php,java"
         ];
 
         $this->postJson(route("api.posts.store"), $data);
@@ -131,6 +165,7 @@ class CreatePostsTest extends TestCase
             "content" => $this->faker->paragraph,
             "category_id" => create(Category::class)->id,
             "online" => false,
+            "tags" => "php,java"
         ];
 
         $this->putJson(route("api.posts.update", $post), $data);
@@ -141,9 +176,37 @@ class CreatePostsTest extends TestCase
         $this->assertEquals($data["online"], !! $post->online);
     }
 
+    /** @test */
+    public function blog_post_tags_can_be_updated()
+    {
+        $this->withoutExceptionHandling();
+
+        $post = create(Post::class, ["title" => "Old title", "online" => true]);
+        $tagNames = ["php", "javascript", "java"];
+        $tagIds = Tag::add($tagNames);
+
+        $post->tags()->attach($tagIds);
+
+        $this->assertEquals(3, $post->tags()->count());
+
+        $data = [
+            "title" => "Lorem ipsum",
+            "content" => $this->faker->paragraph,
+            "category_id" => create(Category::class)->id,
+            "online" => false,
+            "tags" => "php,python,elixir,kotlin,elm"
+        ];
+
+        $this->putJson(route("api.posts.update", $post), $data);
+
+        $post = $post->fresh();
+
+        $this->assertEquals(5, $post->tags()->count());
+    }
+
 
     /** @test */
-    public function post_cove_images_can_be_updated()
+    public function post_cover_images_can_be_updated()
     {
         $post = create(Post::class, ["title" => "Old title", "online" => true]);
 
@@ -152,7 +215,8 @@ class CreatePostsTest extends TestCase
             "content" => $this->faker->paragraph,
             "category_id" => create(Category::class)->id,
             "online" => false,
-            "cover" => UploadedFile::fake()->image('avatar.jpg')
+            "cover" => UploadedFile::fake()->image('avatar.jpg'),
+            "tags" => "php,java"
         ];
 
         $this->putJson(route("api.posts.update", $post), $data);
@@ -161,6 +225,9 @@ class CreatePostsTest extends TestCase
 
         $this->deleteStoreFile(Post::all()->pluck("cover")->toArray());
     }
+
+
+
 
     private function deleteStoreFile(array $filenames) : void
     {

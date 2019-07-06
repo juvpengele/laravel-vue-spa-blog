@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class Tag extends Model
@@ -21,14 +22,17 @@ class Tag extends Model
     /**
      * Add tags
      * @param array $tagNames
+     * @return Collection
      */
-    public static function add(array $tagNames) : void
+    public static function add(array $tagNames) : Collection
     {
         $tagNames = array_unique($tagNames);
 
         $tagToInsert = static::getTagToInsert($tagNames);
 
         static::addMany($tagToInsert);
+
+        return static::whereIn("name", $tagNames)->pluck("id");
     }
 
     /**

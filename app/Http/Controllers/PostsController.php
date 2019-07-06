@@ -8,6 +8,7 @@ use App\Http\Resources\PostCollection;
 use App\Http\Resources\PostResource;
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -65,6 +66,9 @@ class PostsController extends Controller
 
         $post = Post::create($data);
 
+        $tagsId = Tag::add(explode(",", $request->tags));
+        $post->tags()->attach($tagsId);
+
         return new PostResource($post);
     }
 
@@ -109,6 +113,9 @@ class PostsController extends Controller
         }
 
         $post->update($data);
+
+        $tagsId = Tag::add(explode(",", $request->tags));
+        $post->tags()->sync($tagsId);
 
         return new PostResource($post);
     }
