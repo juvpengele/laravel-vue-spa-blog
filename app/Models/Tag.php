@@ -9,7 +9,6 @@ class Tag extends Model
 {
     public $fillable = ["name", "slug"];
 
-
     /**
      * Relationship between a tag with posts
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -42,7 +41,7 @@ class Tag extends Model
         $existingTags = static::whereIn("name", $tagNames)->pluck("name");
 
         return array_filter($tagNames, function ($name) use ($existingTags) {
-            return ! $existingTags->contains($name);
+            return ! $existingTags->contains($name) && $name !== "";
         });
     }
 

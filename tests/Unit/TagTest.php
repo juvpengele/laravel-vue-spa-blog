@@ -62,5 +62,16 @@ class TagTest extends TestCase
     }
 
 
+    /** @test */
+    public  function an_empty_tag_can_not_be_added()
+    {
+        $tags = ["php","java","html", ""];
+
+        Tag::add($tags);
+
+        $this->assertCount(3, Tag::all());
+    }
+
+
 
 }
