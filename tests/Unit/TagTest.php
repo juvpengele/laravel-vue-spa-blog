@@ -27,6 +27,40 @@ class TagTest extends TestCase
         }
 
         $this->assertEquals(2, $tag->posts()->count());
-
     }
+
+    /** @test */
+    public function many_tags_can_be_added_once()
+    {
+        $tags = ["php","java","html"];
+
+        Tag::add($tags);
+
+        $this->assertCount(3, Tag::all());
+    }
+
+    /** @test */
+    public function duplicated_tags_are_added_once()
+    {
+        $tags = ["php", "java", "html", "php"];
+
+        Tag::add($tags);
+
+        $this->assertCount(3, Tag::all());
+    }
+
+    /** @test */
+    public  function when_tag_is_added_it_can_not_added_twice()
+    {
+        Tag::add(["php", "java"]);
+
+        $tags = ["php", "javascript"];
+
+        Tag::add($tags);
+
+        $this->assertCount(3, Tag::all());
+    }
+
+
+
 }
