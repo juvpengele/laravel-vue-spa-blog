@@ -89,10 +89,9 @@
             store(data, config) {
 
                 axios.post(this.endpoint, data, config)
-                    .then((response) => {
-                        return this.$store.dispatch("addCategoryPostCount", {
-                            category_id: this.form.category_id
-                        });
+                    .then(({ data : post}) => {
+
+                        return this.$store.dispatch("addCategoryPostCount", post.data.category);
                     })
                     .then(() => {
                         this.$store.dispatch("alert", {

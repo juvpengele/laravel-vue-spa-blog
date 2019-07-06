@@ -2217,10 +2217,9 @@ __webpack_require__.r(__webpack_exports__);
     store: function store(data, config) {
       var _this = this;
 
-      axios.post(this.endpoint, data, config).then(function (response) {
-        return _this.$store.dispatch("addCategoryPostCount", {
-          category_id: _this.form.category_id
-        });
+      axios.post(this.endpoint, data, config).then(function (_ref) {
+        var post = _ref.data;
+        return _this.$store.dispatch("addCategoryPostCount", post.data.category);
       }).then(function () {
         _this.$store.dispatch("alert", {
           message: "Your post has been saved successfully"
@@ -2384,18 +2383,28 @@ __webpack_require__.r(__webpack_exports__);
     store: function store(data, config) {
       var _this2 = this;
 
-      axios.post(this.endpoint, data, config).then(function (response) {
-        // Change the post count
+      axios.post(this.endpoint, data, config).then(function (_ref2) {
+        var post = _ref2.data;
+
+        if (post.data.category.id !== _this2.post.category.id) {
+          _this2.$store.dispatch("changeCategoriesPostsCount", {
+            old: _this2.post.category,
+            "new": post.data.category
+          });
+        }
+
         return _this2.$store.dispatch("alert", {
           message: "Post edited successfully"
         });
       }).then(function () {
-        return _this2.$router.push({
+        _this2.$router.push({
           name: "admin.posts.index"
         });
       })["catch"](function (error) {
-        if (error.response.data.errors) {
-          _this2.errors.record(error.response.data.errors);
+        var formErrors = error.response.data.errors;
+
+        if (formErrors) {
+          _this2.errors.record(formErrors);
         } else {
           _this2.$store.dispatch("alert", {
             message: "An error occured during the request",
@@ -81418,9 +81427,9 @@ var categories = {
       });
     },
     ADD_POSTS_COUNT: function ADD_POSTS_COUNT(state, _ref2) {
-      var category_id = _ref2.category_id;
+      var id = _ref2.id;
       state.categories.forEach(function (category) {
-        if (category.id === category_id) {
+        if (category.id === id) {
           category.posts_count++;
         }
       });
@@ -81472,6 +81481,10 @@ var categories = {
         store.commit("REMOVE_POSTS_COUNT", payload);
         resolve();
       });
+    },
+    changeCategoriesPostsCount: function changeCategoriesPostsCount(store, payload) {
+      store.commit("REMOVE_POSTS_COUNT", payload.old);
+      store.commit("ADD_POSTS_COUNT", payload["new"]);
     }
   },
   getters: {

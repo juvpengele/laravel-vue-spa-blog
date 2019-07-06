@@ -112,18 +112,26 @@
             store(data, config) {
 
                 axios.post(this.endpoint, data, config)
-                    .then((response) => {
-                        // Change the post count
+                    .then(({ data : post }) => {
+
+                        if(post.data.category.id !== this.post.category.id) {
+                            this.$store.dispatch("changeCategoriesPostsCount", { old: this.post.category, new: post.data.category});
+                        }
+
                         return this.$store.dispatch("alert", {
                             message: "Post edited successfully"
                         })
                     })
-                    .then(() => this.$router.push({
-                        name: "admin.posts.index"
-                    }))
+                    .then(() => {
+                        this.$router.push({
+                            name: "admin.posts.index"
+                        })
+                    })
                     .catch(error => {
-                        if(error.response.data.errors) {
-                            this.errors.record(error.response.data.errors);
+                        let formErrors = error.response.data.errors;
+
+                        if(formErrors) {
+                            this.errors.record(formErrors);
                         } else {
                             this.$store.dispatch("alert", {
                                 message: "An error occured during the request",
