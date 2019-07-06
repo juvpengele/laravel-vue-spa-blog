@@ -14,14 +14,40 @@ class Post extends Model
         return "slug";
     }
 
+    /**
+     * Relationship between a post with its creator
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function creator()
     {
         return $this->belongsTo(User::class, "user_id");
     }
 
+    /**
+     * Relationship between a post with a category
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    /**
+     * Relationship post with tags
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+
+    /**
+     *  Relationship between a post with comments
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class)->latest();
     }
 
     public function getDescriptionAttribute()
@@ -32,11 +58,6 @@ class Post extends Model
     public function scopeSearch($query, $value)
     {
         return $query->where("title", "LIKE", "%$value%");
-    }
-
-    public function comments()
-    {
-        return $this->hasMany(Comment::class)->latest();
     }
 
     public function getCoverAttribute()
