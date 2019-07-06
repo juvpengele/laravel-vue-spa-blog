@@ -65,7 +65,6 @@
         methods: {
             updateCover(cover) {
                 if(this.errors.has('cover')) {
-                    console.log(this.errors.get('cover'))
                     this.errors.clear('cover');
                 }
                 this.form.cover = cover;
@@ -88,6 +87,7 @@
                 this.store(formData, config);
             },
             store(data, config) {
+
                 axios.post(this.endpoint, data, config)
                     .then((response) => {
                         return this.$store.dispatch("addCategoryPostCount", {

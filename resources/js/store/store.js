@@ -30,7 +30,10 @@ const store = {
     },
     actions : {
         alert(store, payload) {
-            store.commit("SHOW_FLASH", payload);
+            return new Promise(function (resolve, reject) {
+                store.commit("SHOW_FLASH", payload);
+                resolve();
+            })
         },
     },
     getters : {

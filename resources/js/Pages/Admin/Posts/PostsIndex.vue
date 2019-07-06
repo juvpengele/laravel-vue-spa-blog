@@ -13,9 +13,10 @@
     import Posts from "../../../components/admin/Posts";
     import AuthMiddleware from "../../../mixins/AuthMiddleware";
     import AddToken from "../../../mixins/AddToken";
+    import authenticated from "../../../mixins/authenticated";
     export default {
         components: {Posts},
-        mixins: [AuthMiddleware, AddToken],
+        mixins: [AuthMiddleware, AddToken, authenticated],
         data() {
             return {
                 posts: [],
@@ -38,9 +39,9 @@
                         })
                     })
             },
-            removePost({id, category}) {
+            removePost({id : post_id, category}) {
 
-                this.posts = this.posts.filter(post => post.id !== id);
+                this.posts = this.posts.filter(post => post.id !== post_id);
 
                 this.$store.dispatch("removeCategoryPostsCount", category)
                             .then(() => this.$store.dispatch("alert", {message: "The post has been deleted successfully"}))
