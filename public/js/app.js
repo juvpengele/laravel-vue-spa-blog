@@ -2127,6 +2127,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_AuthMiddleware__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../mixins/AuthMiddleware */ "./resources/js/mixins/AuthMiddleware.js");
 /* harmony import */ var _mixins_authenticated__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../mixins/authenticated */ "./resources/js/mixins/authenticated.js");
 /* harmony import */ var _Utilities_Errors__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../Utilities/Errors */ "./resources/js/Utilities/Errors.js");
+/* harmony import */ var _Utilities_InputTag__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../Utilities/InputTag */ "./resources/js/Utilities/InputTag.vue");
 //
 //
 //
@@ -2167,6 +2168,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+
 
 
 
@@ -2176,7 +2180,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     CoverUploader: _components_CoverUploader__WEBPACK_IMPORTED_MODULE_0__["default"],
-    MarkdownEditor: vue_simplemde_src_markdown_editor__WEBPACK_IMPORTED_MODULE_1__["default"]
+    MarkdownEditor: vue_simplemde_src_markdown_editor__WEBPACK_IMPORTED_MODULE_1__["default"],
+    InputTag: _Utilities_InputTag__WEBPACK_IMPORTED_MODULE_6__["default"]
   },
   mixins: [_mixins_AuthMiddleware__WEBPACK_IMPORTED_MODULE_3__["default"], _mixins_authenticated__WEBPACK_IMPORTED_MODULE_4__["default"], _mixins_AddToken__WEBPACK_IMPORTED_MODULE_2__["default"]],
   data: function data() {
@@ -2186,7 +2191,8 @@ __webpack_require__.r(__webpack_exports__);
         category_id: "",
         title: "",
         content: "",
-        online: false
+        online: false,
+        tags: ""
       },
       endpoint: "/api/posts",
       errors: new _Utilities_Errors__WEBPACK_IMPORTED_MODULE_5__["default"]()
@@ -2212,6 +2218,7 @@ __webpack_require__.r(__webpack_exports__);
       formData.append("content", this.form.content);
       formData.append("category_id", this.form.category_id);
       formData.append("online", this.form.online);
+      formData.append("tags", this.form.tags);
       this.store(formData, config);
     },
     store: function store(data, config) {
@@ -2264,6 +2271,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_AuthMiddleware__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../mixins/AuthMiddleware */ "./resources/js/mixins/AuthMiddleware.js");
 /* harmony import */ var _mixins_authenticated__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../mixins/authenticated */ "./resources/js/mixins/authenticated.js");
 /* harmony import */ var _Utilities_Errors__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../Utilities/Errors */ "./resources/js/Utilities/Errors.js");
+/* harmony import */ var _Utilities_InputTag__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../Utilities/InputTag */ "./resources/js/Utilities/InputTag.vue");
 //
 //
 //
@@ -2306,6 +2314,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+
 
 
 
@@ -2316,7 +2329,8 @@ __webpack_require__.r(__webpack_exports__);
   name: "PostEdit",
   components: {
     CoverUploader: _components_CoverUploader__WEBPACK_IMPORTED_MODULE_0__["default"],
-    MarkdownEditor: vue_simplemde_src_markdown_editor__WEBPACK_IMPORTED_MODULE_1__["default"]
+    MarkdownEditor: vue_simplemde_src_markdown_editor__WEBPACK_IMPORTED_MODULE_1__["default"],
+    InputTag: _Utilities_InputTag__WEBPACK_IMPORTED_MODULE_6__["default"]
   },
   mixins: [_mixins_AuthMiddleware__WEBPACK_IMPORTED_MODULE_3__["default"], _mixins_authenticated__WEBPACK_IMPORTED_MODULE_4__["default"], _mixins_AddToken__WEBPACK_IMPORTED_MODULE_2__["default"]],
   data: function data() {
@@ -2329,7 +2343,8 @@ __webpack_require__.r(__webpack_exports__);
         category_id: "",
         title: "",
         content: "",
-        online: ""
+        online: "",
+        tags: ""
       }
     };
   },
@@ -2357,12 +2372,16 @@ __webpack_require__.r(__webpack_exports__);
       this.form.cover = cover;
     },
     setForm: function setForm(post) {
+      var tagNames = post.tags.map(function (tag) {
+        return tag.name;
+      });
       this.form = {
         cover: null,
         category_id: post.category.id,
         title: post.title,
         content: post.content,
-        online: post.online
+        online: post.online,
+        tags: tagNames.join(",")
       };
     },
     updatePost: function updatePost() {
@@ -2377,6 +2396,7 @@ __webpack_require__.r(__webpack_exports__);
       formData.append("content", this.form.content);
       formData.append("category_id", this.form.category_id);
       formData.append("online", this.form.online);
+      formData.append("tags", this.form.tags);
       formData.append('_method', 'PUT');
       this.store(formData, config);
     },
@@ -3427,6 +3447,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     dispatchValue: function dispatchValue(value) {
       this.$emit("input", value);
+    }
+  },
+  watch: {
+    value: function value(newValue, oldValue) {
+      this.setData(newValue);
     }
   }
 });
@@ -60475,41 +60500,63 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("div", { staticClass: "form-group" }, [
-            _c("label", { attrs: { for: "title" } }, [_vm._v("Title")]),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.form.title,
-                  expression: "form.title"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { type: "text", id: "title" },
-              domProps: { value: _vm.form.title },
-              on: {
-                keydown: function($event) {
-                  return _vm.errors.clear("title")
+        _c(
+          "div",
+          { staticClass: "form-group" },
+          [
+            _c("input-tag", {
+              attrs: { name: "Tags" },
+              model: {
+                value: _vm.form.tags,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "tags", $$v)
                 },
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.form, "title", $event.target.value)
-                }
+                expression: "form.tags"
               }
             }),
             _vm._v(" "),
-            _vm.errors.has("title")
+            _vm.errors.has("tags")
               ? _c("small", { staticClass: "form-text text-danger" }, [
-                  _vm._v(_vm._s(_vm.errors.get("title")))
+                  _vm._v(_vm._s(_vm.errors.get("tags")))
                 ])
               : _vm._e()
-          ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", { attrs: { for: "title" } }, [_vm._v("Title")]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.form.title,
+                expression: "form.title"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { type: "text", id: "title" },
+            domProps: { value: _vm.form.title },
+            on: {
+              keydown: function($event) {
+                return _vm.errors.clear("title")
+              },
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.form, "title", $event.target.value)
+              }
+            }
+          }),
+          _vm._v(" "),
+          _vm.errors.has("title")
+            ? _c("small", { staticClass: "form-text text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.get("title")))
+              ])
+            : _vm._e()
         ]),
         _vm._v(" "),
         _c(
@@ -60729,6 +60776,30 @@ var render = function() {
             )
           ])
         ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "form-group" },
+          [
+            _c("input-tag", {
+              attrs: { name: "Tags" },
+              model: {
+                value: _vm.form.tags,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "tags", $$v)
+                },
+                expression: "form.tags"
+              }
+            }),
+            _vm._v(" "),
+            _vm.errors.has("tags")
+              ? _c("small", { staticClass: "form-text text-danger" }, [
+                  _vm._v(_vm._s(_vm.errors.get("tags")))
+                ])
+              : _vm._e()
+          ],
+          1
+        ),
         _vm._v(" "),
         _c("div", { staticClass: "form-group" }, [
           _c("div", { staticClass: "form-group" }, [

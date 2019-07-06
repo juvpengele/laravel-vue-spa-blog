@@ -58,6 +58,7 @@
                 document.querySelector(".input--tag").focus();
                 return;
             });
+
             if(this.value.length > 1) {
                 this.setData(this.value);
             }
@@ -100,6 +101,11 @@
             },
             dispatchValue(value) {
                 this.$emit("input", value);
+            }
+        },
+        watch: {
+            value(newValue, oldValue) {
+               this.setData(newValue);
             }
         }
     }

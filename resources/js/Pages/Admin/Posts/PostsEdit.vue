@@ -22,6 +22,10 @@
                 </div>
             </div>
             <div class="form-group">
+                <input-tag name="Tags" v-model="form.tags"></input-tag>
+                <small class="form-text text-danger" v-if="errors.has('tags')">{{ errors.get('tags') }}</small>
+            </div>
+            <div class="form-group">
                 <div class="form-group">
                     <label for="title">Title</label>
                     <input type="text" class="form-control" id="title" v-model="form.title" @keydown="errors.clear('title')">
@@ -47,10 +51,11 @@
     import AuthMiddleware from "../../../mixins/AuthMiddleware";
     import authenticated from "../../../mixins/authenticated";
     import Errors from "../../../Utilities/Errors";
+    import InputTag from "../../../Utilities/InputTag";
 
     export default {
         name: "PostEdit",
-        components: {CoverUploader, MarkdownEditor},
+        components: {CoverUploader, MarkdownEditor, InputTag},
         mixins: [AuthMiddleware, authenticated, AddToken],
         data() {
             return {
@@ -62,7 +67,8 @@
                     category_id: "",
                     title: "",
                     content: "",
-                    online: ""
+                    online: "",
+                    tags: ""
                 },
             }
         },
@@ -83,12 +89,15 @@
                 this.form.cover = cover;
             },
             setForm(post) {
+                let tagNames = post.tags.map((tag) => tag.name)
+
                 this.form = {
                     cover: null,
                     category_id: post.category.id,
                     title: post.title,
                     content: post.content,
-                    online: post.online
+                    online: post.online,
+                    tags: tagNames.join(",")
                 }
             },
             updatePost() {
@@ -105,6 +114,7 @@
                 formData.append("content", this.form.content);
                 formData.append("category_id", this.form.category_id);
                 formData.append("online", this.form.online);
+                formData.append("tags", this.form.tags);
                 formData.append('_method', 'PUT');
 
                 this.store(formData, config);

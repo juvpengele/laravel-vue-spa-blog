@@ -26,7 +26,8 @@ class PostResource extends JsonResource
             "creator" => $this->creator,
             "cover_path" => $this->cover_path,
             "visits_count" => $this->visits,
-            "comments" => CommentRessource::collection($this->whenLoaded("comments"))
+            "comments" => CommentRessource::collection($this->whenLoaded("comments")),
+            "tags" => TagResource::collection($this->tags()->get())
         ];
     }
 }
