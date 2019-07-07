@@ -3817,6 +3817,12 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     addComment: function addComment(comment) {
       this.comments.unshift(comment);
+    },
+    removeComment: function removeComment(_ref) {
+      var comment_id = _ref.id;
+      this.comments = this.comments.filter(function (comment) {
+        return comment.id !== comment_id;
+      });
     }
   },
   watch: {
@@ -3851,9 +3857,44 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Comment",
-  props: ["data"]
+  props: ["data"],
+  methods: {
+    deleteComment: function deleteComment() {
+      var _this = this;
+
+      if (!confirm("Are you sure to delete this comment ?")) {
+        return;
+      }
+
+      var endpoint = "/api/comments/".concat(this.data.id);
+      axios.defaults.headers.common['Authorization'] = "Bearer ".concat(this.auth.token);
+      axios["delete"](endpoint).then(function () {
+        _this.$store.dispatch("alert", {
+          type: "success",
+          message: "Comment deleted successfully"
+        });
+
+        _this.$emit("delete", _this.data);
+      })["catch"](function (error) {
+        _this.$store.dispatch("alert", {
+          type: "danger",
+          message: "An error occured during the request"
+        });
+      });
+    }
+  },
+  computed: {
+    auth: function auth() {
+      return this.$store.getters.auth;
+    }
+  }
 });
 
 /***/ }),
@@ -62890,7 +62931,11 @@ var render = function() {
       _c("CommentForm", { on: { submit: _vm.addComment } }),
       _vm._v(" "),
       _vm._l(_vm.comments, function(comment) {
-        return _c("Comment", { key: comment.id, attrs: { data: comment } })
+        return _c("Comment", {
+          key: comment.id,
+          attrs: { data: comment },
+          on: { delete: _vm.removeComment }
+        })
       })
     ],
     2
@@ -62936,7 +62981,20 @@ var render = function() {
         _c("p", { staticClass: "card-text" }, [
           _vm._v(_vm._s(_vm.data.content))
         ])
-      ])
+      ]),
+      _vm._v(" "),
+      _vm.auth.loggedIn
+        ? _c("div", { staticClass: "card-footer d-flex justify-content-end" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-danger",
+                on: { click: _vm.deleteComment }
+              },
+              [_vm._v("\n                Delete\n            ")]
+            )
+          ])
+        : _vm._e()
     ])
   ])
 }

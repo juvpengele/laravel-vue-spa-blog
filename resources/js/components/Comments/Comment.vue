@@ -8,6 +8,11 @@
             <div class="card-body">
                 <p class="card-text">{{ data.content }}</p>
             </div>
+            <div class="card-footer d-flex justify-content-end" v-if="auth.loggedIn">
+                <button class="btn btn-danger" @click="deleteComment">
+                    Delete
+                </button>
+            </div>
         </div>
     </div>
 </template>
@@ -15,7 +20,38 @@
 <script>
     export default {
         name: "Comment",
-        props: ["data"]
+        props: ["data"],
+        methods: {
+            deleteComment() {
+                if(! confirm("Are you sure to delete this comment ?")) {
+                    return;
+                }
+
+                let endpoint =  `/api/comments/${this.data.id}`;
+
+                axios.defaults.headers.common['Authorization'] = `Bearer ${ this.auth.token }`;
+                axios.delete(endpoint)
+                    .then(() => {
+                        this.$store.dispatch("alert", {
+                            type: "success",
+                            message: "Comment deleted successfully"
+                        });
+                        this.$emit("delete", this.data);
+                    })
+                    .catch(error => {
+                        this.$store.dispatch("alert", {
+                            type: "danger",
+                            message: "An error occured during the request"
+                        })
+                    })
+
+            }
+        },
+        computed: {
+            auth() {
+                return this.$store.getters.auth;
+            }
+        }
     }
 </script>
 

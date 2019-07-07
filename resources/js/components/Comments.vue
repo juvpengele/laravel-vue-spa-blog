@@ -2,7 +2,7 @@
     <!-- comments -->
     <div class="comment-form col-md-12 border-top pt-4">
         <CommentForm @submit="addComment"></CommentForm>
-        <Comment v-for="comment in comments" :data="comment" :key="comment.id"></Comment>
+        <Comment v-for="comment in comments" :data="comment" :key="comment.id" @delete="removeComment"></Comment>
     </div>
     <!-- End comments -->
 </template>
@@ -27,6 +27,9 @@
         methods: {
             addComment(comment) {
                 this.comments.unshift(comment)
+            },
+            removeComment({ id : comment_id}) {
+                this.comments = this.comments.filter(comment => comment.id !== comment_id);
             }
         },
         watch: {
