@@ -4,18 +4,12 @@
             <input class="form-control mr-sm-2" type="text" placeholder="Search an article"
                    @focus="showResults" @blur="removeResults" v-model="query" @keyup="loadResults">
         </div>
-        <div  id="search-tab" role="tablist" class="list-group list-group-flush shadow-sm post-search--results" v-if="search">
-            <router-link
-                :to="{
-                    name: 'posts.show',
-                    params: {
-                        slug: result.slug,
-                        category: result.category.slug
-                    }
-                }"
-            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" v-for="result in results" :key="result.id">
+        <div class="list-group list-group-flush shadow-sm post-search--results" v-if="search">
+            <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center result" v-for="result in results" :key="result.id"
+                @click.prevent="goTo(result)" href="#" :data-result="result.slug"
+            >
                 {{ result.title }}
-            </router-link>
+            </a>
         </div>
     </div>
 
@@ -37,6 +31,12 @@
                 this.search = true;
             },
             removeResults() {
+                let isResultClicked = event.relatedTarget.classList.contains("result");
+
+                if(isResultClicked) {
+                    this.goTo(event.relatedTarget.dataset.result);
+                }
+
                 this.search = false;
             },
             loadResults() {
@@ -50,6 +50,17 @@
                 axios.get(endpoint)
                 .then(({data : results}) => {
                     this.results = results.data;
+                })
+            },
+            goTo(slug) {
+                let result = this.results.find((result) => result.slug === slug);
+
+                this.$router.push({
+                    name: "posts.show",
+                    params: {
+                        category: result.category.slug,
+                        slug: result.slug
+                    }
                 })
             }
         }

@@ -2989,6 +2989,11 @@ __webpack_require__.r(__webpack_exports__);
         return console.log(error);
       });
     }
+  },
+  watch: {
+    '$route.params': function $routeParams(value) {
+      this.fetchPost(value);
+    }
   }
 });
 
@@ -4243,12 +4248,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PostSearch",
   data: function data() {
@@ -4264,6 +4263,12 @@ __webpack_require__.r(__webpack_exports__);
       this.search = true;
     },
     removeResults: function removeResults() {
+      var isResultClicked = event.relatedTarget.classList.contains("result");
+
+      if (isResultClicked) {
+        this.goTo(event.relatedTarget.dataset.result);
+      }
+
       this.search = false;
     },
     loadResults: function loadResults() {
@@ -4278,6 +4283,18 @@ __webpack_require__.r(__webpack_exports__);
       axios.get(endpoint).then(function (_ref) {
         var results = _ref.data;
         _this.results = results.data;
+      });
+    },
+    goTo: function goTo(slug) {
+      var result = this.results.find(function (result) {
+        return result.slug === slug;
+      });
+      this.$router.push({
+        name: "posts.show",
+        params: {
+          category: result.category.slug,
+          slug: result.slug
+        }
       });
     }
   }
@@ -63518,30 +63535,27 @@ var render = function() {
           "div",
           {
             staticClass:
-              "list-group list-group-flush shadow-sm post-search--results",
-            attrs: { id: "search-tab", role: "tablist" }
+              "list-group list-group-flush shadow-sm post-search--results"
           },
           _vm._l(_vm.results, function(result) {
             return _c(
-              "router-link",
+              "a",
               {
                 key: result.id,
                 staticClass:
-                  "list-group-item list-group-item-action d-flex justify-content-between align-items-center",
-                attrs: {
-                  to: {
-                    name: "posts.show",
-                    params: {
-                      slug: result.slug,
-                      category: result.category.slug
-                    }
+                  "list-group-item list-group-item-action d-flex justify-content-between align-items-center result",
+                attrs: { href: "#", "data-result": result.slug },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.goTo(result)
                   }
                 }
               },
               [_vm._v("\n            " + _vm._s(result.title) + "\n        ")]
             )
           }),
-          1
+          0
         )
       : _vm._e()
   ])

@@ -48,6 +48,11 @@
                     .then(({ data : post}) => this.post = post.data)
                     .catch(error => console.log(error));
             }
+        },
+        watch: {
+            '$route.params'(value) {
+                this.fetchPost(value);
+            }
         }
     }
 </script>
