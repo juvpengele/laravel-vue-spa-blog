@@ -32,7 +32,15 @@ Route::resource("posts", "PostsController")->names([
 ]);
 
 Route::get("{category}/{post}", "PostsController@show")->name("api.posts.show");
+
+/*
+    |--------------------------------------------------------------------------
+    | Comments routes
+    |--------------------------------------------------------------------------
+*/
+Route::get("/comments", "CommentsController@index")->name("api.comments.index");
 Route::post("{category}/{post}/comments", "CommentsController@store")->name("api.comments.store");
+Route::delete("comments/{comment}", "CommentsController@destroy")->name("api.comments.destroy");
 
 /*
     |--------------------------------------------------------------------------
@@ -63,6 +71,7 @@ Route::apiResource("tags", "TagsController")->names([
     "destroy"   => "api.tags.destroy",
 ])->except(["store"]);
 Route::get("/tags/{tag}/posts", "TagsController@getPosts")->name("api.tags.posts");
+
 
 
 

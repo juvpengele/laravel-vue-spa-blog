@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Comment;
 use App\Models\Post;
+use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -42,6 +43,43 @@ class CreateCommentsTest extends TestCase
         $this->assertTrue( array_key_exists("author_email", $jsonResponse["errors"]));
         $this->assertTrue( array_key_exists("content", $jsonResponse["errors"]));
 
+    }
+
+    /** @test */
+    public function an_admin_can_see_all_comments()
+    {
+        $admin = create(User::class);
+        $this->signIn($admin);
+        $authToken = auth()->tokenById($admin->id);
+
+        create(Comment::class, [],10);
+
+        $response = $this->withHeaders([
+                "Bearer" =>  "Authorization {$authToken}"
+            ])->getJson(route("api.comments.index"));
+
+        $this->assertCount(10, $response->json()["data"]);
+    }
+
+
+    /** @test */
+    public  function an_admin_can_delete_a_comment()
+    {
+        $this->withoutExceptionHandling();
+
+        $admin = create(User::class);
+        $this->signIn($admin);
+        $authToken = auth()->tokenById($admin->id);
+
+        $comment = create(Comment::class);
+
+        $this->withHeaders([
+            "Bearer" =>  "Authorization {$authToken}"
+        ])->deleteJson(route("api.comments.destroy", $comment));
+
+        $this->assertDatabaseMissing("comments", [
+            "id"    => $comment->id
+        ]);
     }
 
 }
