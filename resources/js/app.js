@@ -14,6 +14,10 @@ Vue.prototype.pluralize = (word, count) => {
     return parseInt(count) > 1 ? word + "s" : word;
 };
 
+Vue.prototype.setDocumentTitle = function (title = "SPA Blog") {
+      document.title = title;
+};
+
 const app = new Vue({
     el: '#app',
     router: new VueRouter({ routes, mode: "history" }),

@@ -24,7 +24,7 @@ class CommentsController extends Controller
     {
         $comments = Comment::latest()->get();
 
-        return CommentRessource::collection($comments);
+        return response()->json(["data" => $comments]);
     }
 
     /**

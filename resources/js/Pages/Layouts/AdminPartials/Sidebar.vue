@@ -49,8 +49,19 @@
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <router-link :to="{ name: 'admin.tags.index'}" class="nav-link text-info">
-                        <i class="fa fa-list-ul"></i>
+                        <i class="fa fa-tags"></i>
                         Manage tags
+                    </router-link>
+                </li>
+            </ul>
+            <span class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span>Comments</span>
+            </span>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <router-link :to="{ name: 'admin.comments.index'}" class="nav-link text-info">
+                        <i class="fa fa-comments"></i>
+                        Manage comments
                     </router-link>
                 </li>
             </ul>

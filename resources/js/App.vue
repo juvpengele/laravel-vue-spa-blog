@@ -20,15 +20,16 @@
             return {
                 defaultLayout: "blog-layout"
             }
+        },mounted() {
+            this.$store.dispatch("fetchCategories");
+            this.setDocumentTitle("SPA Blog");
         },
         computed: {
             layout() {
                 return this.$route.meta.layout ? this.$route.meta.layout : this.defaultLayout;
             }
         },
-        mounted() {
-            this.$store.dispatch("fetchCategories")
-        }
+
     }
 </script>
 
