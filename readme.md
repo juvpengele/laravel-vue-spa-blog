@@ -17,8 +17,6 @@ store for the application.
 
 * PHP 7.2
 * SQLite3 for development and MySQL for production.
-* Git
-* Composer
 * [Laravel](http://www.laravel.com) - A PHP Full stack framework
 * [Tymon/Jwt-auth](https://jwt-auth.readthedocs.io/en/develop/) - A library used in laravel for Json Web Token authentication
 
@@ -37,6 +35,8 @@ store for the application.
 
 * PHP 7.2
 * SQLite3
+* Git
+* Composer
 
 ## Getting Started
 
