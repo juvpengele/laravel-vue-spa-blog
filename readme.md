@@ -66,7 +66,7 @@ store for the application.
 
           laravel-vue-spa-blog$ vim .env
         
-* Change the DB_DATABASE to put sqlite :
+* Change the DB_CONNECTION to put sqlite :
 
           DB_CONNECTION=sqlite        
 
