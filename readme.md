@@ -2,7 +2,7 @@
 
 This application can be used as **starter kit** if you want to get started building an single page application with **Laravel** 
 and **VueJS**. 
-This is a blog using features like administration and many other feature which can be found in most web applications.
+This is a blog using feature like administration, creating and editing posts, commenting, searching posts and many other feature which can be found in most web applications.
 
 ## Technologies
 
@@ -17,6 +17,8 @@ store for the application.
 
 * PHP 7.2
 * SQLite3 for development and MySQL for production.
+* Git
+* Composer
 * [Laravel](http://www.laravel.com) - A PHP Full stack framework
 * [Tymon/Jwt-auth](https://jwt-auth.readthedocs.io/en/develop/) - A library used in laravel for Json Web Token authentication
 
