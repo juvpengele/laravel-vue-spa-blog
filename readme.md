@@ -1,10 +1,114 @@
-## About the application
+# Laravel and Vue Single Page Application Blog
 
-WIP
+This application can be used as **starter kit** if you want to get started building an single page application with **Laravel** 
+and **VueJS**. 
+This is a blog using features like administration and many other feature which can be found in most web applications.
+
+## Technologies
+
+### Frontend
+
+* [VueJS](https://fr.vuejs.org/index.html) - A JavaScript framework for building great user interfaces.
+* [Bootstrap 4](https://getbootstrap.com) - Bootstrap is the most used CSS framework.
+* [Vuex](https://getbootstrap.com) - A state management library for VueJS applications and serves as a central
+store for the application.
+
+### Backend
+
+* PHP 7.2
+* SQLite3 for development and MySQL for production.
+* [Laravel](http://www.laravel.com) - A PHP Full stack framework
+* [Tymon/Jwt-auth](https://jwt-auth.readthedocs.io/en/develop/) - A library used in laravel for Json Web Token authentication
+
+## Features
+
+* CRUD (create / read / update / delete) on posts
+* CRUD (create / read / update / delete ) on post categories
+* Image upload for post cover
+* Creating comments on post page
+* Pagination on posts listing
+* Searching on posts
+* Authentication for the admin
+* Application ready for production
+
+## Prerequisites
+
+* PHP 7.2
+* SQLite3
+
+## Getting Started
+
+* Clone the project from Github
+
+          $ git clone https://github.com/juvpengele/laravel-vue-spa-blog
+          $ cd laravel-vue-spa-blog
+          laravel-vue-spa-blog$
+
+* Install the packages for laravel:
+
+         laravel-vue-spa-blog$ composer install
+
+* Create the database:
+
+          laravel-vue-spa-blog$ touch database/database.sqlite
+          
+* Create the .env file :
+
+          laravel-vue-spa-blog$ cp .env.example .env
+        
+* Generate the encryption key for Laravel :
+
+          laravel-vue-spa-blog$ php artisan key:generate
+        
+* Add database information :
+
+          laravel-vue-spa-blog$ vim .env
+        
+* Change the DB_DATABASE to put sqlite :
+
+          DB_CONNECTION=sqlite        
+
+* Load sample records:
+
+          laravel-vue-spa-blog$ php artisan migrate --seed
+
+* Run the Laravel Server in development mode
+
+          laravel-vue-spa-blog$ php artisan serve
 
 
-It is a blog made with Laravel as the back-end framework and Vuejs as the front-end framework
 
------
+* Start client in development mode. You should be able to go to `http://localhost:8000`
 
-This application is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Next step
+
+* [ ] Create Laravel and React Single Page Application Forum
+
+## Screens
+
+#### Listing posts
+
+<img alt="Listing posts" src="https://i.imgur.com/6pvqPKG.png" width="500">
+
+
+#### Single Post page
+
+<img alt="Post page" src="https://i.imgur.com/wvQLSYZ.png" width="500">
+
+#### Creating comments
+
+<img alt="Creating comments" src="https://i.imgur.com/KvK31Ny.png" width="500">
+
+
+#### Login page
+
+<img alt="Post page" src="https://i.imgur.com/eWHg0RG.png" width="500">
+
+
+#### Create a post page (administration)
+
+<img alt="Post page" src="https://i.imgur.com/8oiI6kd.png" width="500">
+
+## License
+
+MIT © 
