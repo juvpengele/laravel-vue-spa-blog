@@ -18,4 +18,9 @@ class Comment extends Model
     {
         return substr($this->attributes["content"], 0, 30) . "...";
     }
+
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
+    }
 }
