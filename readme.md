@@ -78,9 +78,9 @@ store for the application.
 
           laravel-vue-spa-blog$ php artisan serve
 
-
-
 * Start client in development mode. You should be able to go to `http://localhost:8000`
+
+* To access to the administration panel, there is a link in the bottom of the page or go to `http://localhost:8000/login`
 
 ## Next step
 
