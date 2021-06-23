@@ -25,7 +25,7 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
-        "datatables.net": "^1.10.19",
+        "datatables.net": "^1.10.22",
         "mdbvue": "^5.5.0",
         "moment": "^2.24.0",
         "vue-router": "^3.0.6",
